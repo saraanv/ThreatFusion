@@ -1,0 +1,11 @@
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\bin\Debug\net8.0\ThreatFusion.Identity.Infrastructure.deps.json
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\bin\Debug\net8.0\ThreatFusion.Identity.Infrastructure.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\bin\Debug\net8.0\ThreatFusion.Identity.Infrastructure.pdb
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.AssemblyInfoInputs.cache
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.AssemblyInfo.cs
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.csproj.CoreCompileInputs.cache
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\refint\ThreatFusion.Identity.Infrastructure.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.pdb
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ref\ThreatFusion.Identity.Infrastructure.dll

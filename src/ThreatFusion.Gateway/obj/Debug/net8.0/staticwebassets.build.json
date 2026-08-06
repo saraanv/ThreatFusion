@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "mL4SO2EF5rQIoz9p4xuyY3nhH5jflEmA5hK4iFNrbYk=",
+  "Source": "ThreatFusion.Gateway",
+  "BasePath": "_content/ThreatFusion.Gateway",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

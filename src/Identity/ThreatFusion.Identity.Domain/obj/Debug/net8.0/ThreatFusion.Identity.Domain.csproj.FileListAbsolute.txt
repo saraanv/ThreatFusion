@@ -1,0 +1,11 @@
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\bin\Debug\net8.0\ThreatFusion.Identity.Domain.deps.json
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\bin\Debug\net8.0\ThreatFusion.Identity.Domain.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\bin\Debug\net8.0\ThreatFusion.Identity.Domain.pdb
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.GeneratedMSBuildEditorConfig.editorconfig
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.AssemblyInfoInputs.cache
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.AssemblyInfo.cs
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.csproj.CoreCompileInputs.cache
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\refint\ThreatFusion.Identity.Domain.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.pdb
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ref\ThreatFusion.Identity.Domain.dll

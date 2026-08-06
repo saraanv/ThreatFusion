@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ThreatFusion.Gateway.props" />
+</Project>

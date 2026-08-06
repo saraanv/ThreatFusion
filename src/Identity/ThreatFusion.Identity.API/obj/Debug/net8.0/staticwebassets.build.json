@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "g+m3bzIjl591yOuEqbv3b1+ZdzE+P5N1N20oJPj14hE=",
+  "Source": "ThreatFusion.IdentityService",
+  "BasePath": "_content/ThreatFusion.IdentityService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
