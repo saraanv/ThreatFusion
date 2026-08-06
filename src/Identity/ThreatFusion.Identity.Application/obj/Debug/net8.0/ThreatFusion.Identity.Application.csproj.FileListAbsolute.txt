@@ -9,3 +9,8 @@ F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\refint\ThreatFusion.Identity.Application.dll
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\ThreatFusion.Identity.Application.pdb
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\ref\ThreatFusion.Identity.Application.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\bin\Debug\net8.0\ThreatFusion.Identity.Domain.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\bin\Debug\net8.0\ThreatFusion.Identity.Domain.pdb
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\ThreatFusion.Identity.Application.csproj.AssemblyReference.cache
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\ThreatFusion.Identity.Application.sourcelink.json
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Application\obj\Debug\net8.0\ThreatFu.FFF041CC.Up2Date

@@ -31,3 +31,4 @@ F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\refint\ThreatFus
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.pdb
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.genruntimeconfig.cache
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ref\ThreatFusion.ThreatService.dll
+F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.sourcelink.json

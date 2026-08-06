@@ -9,3 +9,4 @@ F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\Threa
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\refint\ThreatFusion.Identity.Domain.dll
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.pdb
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ref\ThreatFusion.Identity.Domain.dll
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Domain\obj\Debug\net8.0\ThreatFusion.Identity.Domain.sourcelink.json

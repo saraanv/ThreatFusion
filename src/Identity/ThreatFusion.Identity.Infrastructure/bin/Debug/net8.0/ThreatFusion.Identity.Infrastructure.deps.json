@@ -7,14 +7,41 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "ThreatFusion.Identity.Infrastructure/1.0.0": {
+        "dependencies": {
+          "ThreatFusion.Identity.Application": "1.0.0",
+          "ThreatFusion.Identity.Domain": "1.0.0"
+        },
         "runtime": {
           "ThreatFusion.Identity.Infrastructure.dll": {}
+        }
+      },
+      "ThreatFusion.Identity.Application/1.0.0": {
+        "dependencies": {
+          "ThreatFusion.Identity.Domain": "1.0.0"
+        },
+        "runtime": {
+          "ThreatFusion.Identity.Application.dll": {}
+        }
+      },
+      "ThreatFusion.Identity.Domain/1.0.0": {
+        "runtime": {
+          "ThreatFusion.Identity.Domain.dll": {}
         }
       }
     }
   },
   "libraries": {
     "ThreatFusion.Identity.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ThreatFusion.Identity.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ThreatFusion.Identity.Domain/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

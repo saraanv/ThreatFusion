@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\ThreatFusion.Identity.Application\ThreatFusion.Identity.Application.csproj" />
+    <ProjectReference Include="..\ThreatFusion.Identity.Domain\ThreatFusion.Identity.Domain.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

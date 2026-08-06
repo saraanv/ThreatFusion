@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "g+m3bzIjl591yOuEqbv3b1+ZdzE+P5N1N20oJPj14hE=",
-  "Source": "ThreatFusion.IdentityService",
-  "BasePath": "_content/ThreatFusion.IdentityService",
+  "Hash": "BYnJPr4g+TeGuWRct67XGUPVhn1yjzIsJO32EkKEwEk=",
+  "Source": "ThreatFusion.Identity.API",
+  "BasePath": "_content/ThreatFusion.Identity.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

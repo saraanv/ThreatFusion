@@ -107,6 +107,43 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "ThreatFusion.Identity.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ThreatFusion.Identity.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ThreatFusion.Identity.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ThreatFusion.Identity.Application.dll": {}
+        }
+      },
+      "ThreatFusion.Identity.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ThreatFusion.Identity.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ThreatFusion.Identity.Domain.dll": {}
+        }
+      },
+      "ThreatFusion.Identity.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ThreatFusion.Identity.Application": "1.0.0",
+          "ThreatFusion.Identity.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ThreatFusion.Identity.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ThreatFusion.Identity.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -451,12 +488,29 @@
         "swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "ThreatFusion.Identity.Application/1.0.0": {
+      "type": "project",
+      "path": "../ThreatFusion.Identity.Application/ThreatFusion.Identity.Application.csproj",
+      "msbuildProject": "../ThreatFusion.Identity.Application/ThreatFusion.Identity.Application.csproj"
+    },
+    "ThreatFusion.Identity.Domain/1.0.0": {
+      "type": "project",
+      "path": "../ThreatFusion.Identity.Domain/ThreatFusion.Identity.Domain.csproj",
+      "msbuildProject": "../ThreatFusion.Identity.Domain/ThreatFusion.Identity.Domain.csproj"
+    },
+    "ThreatFusion.Identity.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../ThreatFusion.Identity.Infrastructure/ThreatFusion.Identity.Infrastructure.csproj",
+      "msbuildProject": "../ThreatFusion.Identity.Infrastructure/ThreatFusion.Identity.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.AspNetCore.OpenApi >= 8.0.6",
-      "Swashbuckle.AspNetCore >= 6.4.0"
+      "Swashbuckle.AspNetCore >= 6.4.0",
+      "ThreatFusion.Identity.Application >= 1.0.0",
+      "ThreatFusion.Identity.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -465,9 +519,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.API\\ThreatFusion.IdentityService.csproj",
-      "projectName": "ThreatFusion.IdentityService",
-      "projectPath": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.API\\ThreatFusion.IdentityService.csproj",
+      "projectUniqueName": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.API\\ThreatFusion.Identity.API.csproj",
+      "projectName": "ThreatFusion.Identity.API",
+      "projectPath": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.API\\ThreatFusion.Identity.API.csproj",
       "packagesPath": "C:\\Users\\Sara\\.nuget\\packages\\",
       "outputPath": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.API\\obj\\",
       "projectStyle": "PackageReference",
@@ -486,7 +540,14 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.Application\\ThreatFusion.Identity.Application.csproj": {
+              "projectPath": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.Application\\ThreatFusion.Identity.Application.csproj"
+            },
+            "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.Infrastructure\\ThreatFusion.Identity.Infrastructure.csproj": {
+              "projectPath": "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.Infrastructure\\ThreatFusion.Identity.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
