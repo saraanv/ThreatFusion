@@ -40,10 +40,10 @@ F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFus
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.AssemblyInfoInputs.cache
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.AssemblyInfo.cs
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.csproj.CoreCompileInputs.cache
+F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.sourcelink.json
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFu.C27999C2.Up2Date
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\refint\ThreatFusion.FeedCollectorService.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.pdb
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.genruntimeconfig.cache
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ref\ThreatFusion.FeedCollectorService.dll
-F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.sourcelink.json

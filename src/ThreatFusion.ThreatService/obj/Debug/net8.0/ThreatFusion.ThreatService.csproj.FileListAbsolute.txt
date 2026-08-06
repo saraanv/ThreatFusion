@@ -17,6 +17,7 @@ F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.Thr
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.csproj.CoreCompileInputs.cache
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.MvcApplicationPartsAssemblyInfo.cs
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.MvcApplicationPartsAssemblyInfo.cache
+F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.sourcelink.json
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\staticwebassets.build.json
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\staticwebassets.development.json
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\staticwebassets\msbuild.ThreatFusion.ThreatService.Microsoft.AspNetCore.StaticWebAssets.props
@@ -31,4 +32,3 @@ F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\refint\ThreatFus
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.pdb
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.genruntimeconfig.cache
 F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ref\ThreatFusion.ThreatService.dll
-F:\ThreatFusion\src\ThreatFusion.ThreatService\obj\Debug\net8.0\ThreatFusion.ThreatService.sourcelink.json

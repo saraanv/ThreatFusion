@@ -17,6 +17,7 @@ F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.A
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.csproj.CoreCompileInputs.cache
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.MvcApplicationPartsAssemblyInfo.cs
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.MvcApplicationPartsAssemblyInfo.cache
+F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.sourcelink.json
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\staticwebassets.build.json
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\staticwebassets.development.json
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\staticwebassets\msbuild.ThreatFusion.Gateway.Microsoft.AspNetCore.StaticWebAssets.props
@@ -31,4 +32,3 @@ F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\refint\ThreatFusion.Ga
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.pdb
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.genruntimeconfig.cache
 F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ref\ThreatFusion.Gateway.dll
-F:\ThreatFusion\src\ThreatFusion.Gateway\obj\Debug\net8.0\ThreatFusion.Gateway.sourcelink.json
