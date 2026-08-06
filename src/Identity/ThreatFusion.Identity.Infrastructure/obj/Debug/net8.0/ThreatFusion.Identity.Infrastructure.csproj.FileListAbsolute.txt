@@ -16,3 +16,5 @@ F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\bin\Debug\net8
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.csproj.AssemblyReference.cache
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.sourcelink.json
 F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFu.2B64EE6E.Up2Date
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\bin\Debug\net8.0\ThreatFusion.Identity.Infrastructure.runtimeconfig.json
+F:\ThreatFusion\src\Identity\ThreatFusion.Identity.Infrastructure\obj\Debug\net8.0\ThreatFusion.Identity.Infrastructure.genruntimeconfig.cache
