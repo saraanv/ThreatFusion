@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using ThreatFusion.Identity.Application.Abstractions;
 using ThreatFusion.Identity.Application.Common.Models;
+using ThreatFusion.Identity.Application.Features.Users.AssignRole;
 using ThreatFusion.Identity.Domain.Constants;
 using ThreatFusion.Identity.Domain.Entities;
 
@@ -114,5 +115,67 @@ public sealed class IdentityService : IIdentityService
             user.FirstName,
             user.LastName,
             user.Email!);
+    }
+    
+    public async Task<AssignRoleResult> AssignRoleAsync(
+        long userId,
+        string role,
+        CancellationToken cancellationToken)
+    {
+        var user =
+            await _userManager.FindByIdAsync(
+                userId.ToString());
+    
+        if (user is null ||
+            user.IsDeleted)
+        {
+            return AssignRoleResult.Failure(
+                "User was not found.");
+        }
+    
+        string[] validRoles =
+        [
+            Roles.Admin,
+            Roles.Analyst,
+            Roles.Viewer
+        ];
+    
+        if (!validRoles.Contains(
+                role,
+                StringComparer.OrdinalIgnoreCase))
+        {
+            return AssignRoleResult.Failure(
+                "Invalid role.");
+        }
+    
+        var normalizedRole =
+            validRoles.First(x =>
+                string.Equals(
+                    x,
+                    role,
+                    StringComparison.OrdinalIgnoreCase));
+    
+        var currentRoles =
+            await _userManager.GetRolesAsync(user);
+    
+        if (currentRoles.Contains(normalizedRole))
+        {
+            return AssignRoleResult.Success();
+        }
+    
+        var result =
+            await _userManager.AddToRoleAsync(
+                user,
+                normalizedRole);
+    
+        if (!result.Succeeded)
+        {
+            return AssignRoleResult.Failure(
+                result.Errors
+                    .Select(x => x.Description)
+                    .ToArray());
+        }
+    
+        return AssignRoleResult.Success();
     }
 }

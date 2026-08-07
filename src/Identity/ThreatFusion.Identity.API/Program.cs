@@ -109,5 +109,7 @@ app.MapGet("/health", () => Results.Ok(new
     Service = "ThreatFusion.Identity.API",
     TimestampUtc = DateTime.UtcNow
 }));
-await IdentitySeeder.SeedRolesAsync(app.Services);
+
+await IdentitySeeder.SeedAsync(app.Services, builder.Configuration);
+
 app.Run();

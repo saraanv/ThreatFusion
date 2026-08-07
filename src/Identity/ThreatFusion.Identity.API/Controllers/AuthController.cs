@@ -5,6 +5,7 @@ using ThreatFusion.Identity.Application.Features.Authentication.Login;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using ThreatFusion.Identity.Application.Features.Users.AssignRole;
 
 namespace ThreatFusion.Identity.API.Controllers;
 
@@ -118,4 +119,30 @@ public sealed class AuthController : ControllerBase
         });
     }
     
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [Route("AssignRole")]
+    [ActionName("تخصیص نقش به کاربر")]
+    public async Task<IActionResult> AssignRole(
+        AssignRoleCommand command,
+        CancellationToken cancellationToken)
+    {
+        var result =
+            await _sender.Send(
+                command,
+                cancellationToken);
+    
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                Errors = result.Errors
+            });
+        }
+    
+        return Ok(new
+        {
+            Message = "Role assigned successfully."
+        });
+    }
 }
