@@ -29,7 +29,7 @@ public sealed class ThreatIndicatorsController : ControllerBase
         var result = await _sender.Send(
             command,
             cancellationToken);
-
+    
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -37,14 +37,13 @@ public sealed class ThreatIndicatorsController : ControllerBase
                 Errors = result.Errors
             });
         }
-
+    
         return StatusCode(
             StatusCodes.Status201Created,
             new
             {
                 result.IndicatorId,
-                Message =
-                    "Threat indicator created successfully."
+                Message = "Threat indicator created successfully."
             });
     }
 
@@ -59,7 +58,7 @@ public sealed class ThreatIndicatorsController : ControllerBase
         var result = await _sender.Send(
             new SearchThreatIndicatorQuery(value),
             cancellationToken);
-
+    
         return Ok(result);
     }
 }
