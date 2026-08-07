@@ -1,0 +1,6 @@
+@ThreatFusion.IdentityService_HostAddress = http://localhost:5007
+
+GET {{ThreatFusion.IdentityService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

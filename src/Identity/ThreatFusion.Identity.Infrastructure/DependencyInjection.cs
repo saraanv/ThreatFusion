@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ThreatFusion.Identity.Domain.Entities;
 using ThreatFusion.Identity.Infrastructure.Persistence;
+using ThreatFusion.Identity.Application.Abstractions;
+using ThreatFusion.Identity.Infrastructure.Identity;
 
 namespace ThreatFusion.Identity.Infrastructure;
 
@@ -41,7 +43,7 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<IdentityDbContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();
-
+        services.AddScoped<IIdentityService, IdentityService>();
         return services;
     }
 }
