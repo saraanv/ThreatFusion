@@ -14,6 +14,8 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
 
     public DbSet<ThreatIndicator> ThreatIndicators =>
         Set<ThreatIndicator>();
+    public DbSet<ThreatFeedSync> ThreatFeedSyncs =>
+        Set<ThreatFeedSync>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -52,7 +54,17 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
             })
             .IsUnique();
 
-            entity.HasQueryFilter(x => !x.IsDeleted);
+            entity.HasQueryFilter(x => !x.IsDeleted);builder.Entity<ThreatFeedSync>(entity =>
+            {
+                entity.ToTable("ThreatFeedSyncs");
+
+                entity.Property(x => x.FeedName)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.Property(x => x.ErrorMessage)
+                    .HasMaxLength(2000);
+            });
         });
     }
 }

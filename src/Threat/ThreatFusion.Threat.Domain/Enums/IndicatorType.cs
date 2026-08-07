@@ -8,5 +8,6 @@ public enum IndicatorType
     Url = 4,
     Md5 = 5,
     Sha1 = 6,
-    Sha256 = 7
+    Sha256 = 7,
+    Cve = 8
 }

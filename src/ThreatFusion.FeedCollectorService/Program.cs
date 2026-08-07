@@ -1,5 +1,6 @@
 using ThreatFusion.FeedCollectorService;
 using ThreatFusion.FeedCollectorService.Providers;
+using ThreatFusion.FeedCollectorService.Providers.CisaKev;
 using ThreatFusion.FeedCollectorService.Services;
 
 var builder =
@@ -10,9 +11,14 @@ var gatewayBaseUrl =
     ?? throw new InvalidOperationException(
         "Gateway BaseUrl is not configured.");
 
-builder.Services.AddSingleton<
+builder.Services.AddHttpClient<
     IThreatFeedProvider,
-    MockThreatFeedProvider>();
+    CisaKevFeedProvider>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri("https://www.cisa.gov");
+    });
 
 builder.Services.AddHttpClient<IdentityApiClient>(
     client =>
