@@ -54,7 +54,7 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
 
         claims.AddRange(
             roles.Select(role =>
-                new Claim(ClaimTypes.Role, role)));
+                new Claim("role", role)));
 
         var key =
             new SymmetricSecurityKey(

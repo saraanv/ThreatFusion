@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using ThreatFusion.Identity.Application.Abstractions;
 using ThreatFusion.Identity.Application.Common.Models;
+using ThreatFusion.Identity.Domain.Constants;
 using ThreatFusion.Identity.Domain.Entities;
 
 namespace ThreatFusion.Identity.Infrastructure.Identity;
@@ -47,7 +48,9 @@ public sealed class IdentityService : IIdentityService
         };
 
         var identityResult = await _userManager.CreateAsync(user, password);
-
+        await _userManager.AddToRoleAsync(
+            user,
+            Roles.Viewer);
         if (!identityResult.Succeeded)
         {
             return RegisterUserResult.Failure(identityResult.Errors.Select(error => error.Description));

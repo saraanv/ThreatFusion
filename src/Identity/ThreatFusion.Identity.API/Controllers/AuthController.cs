@@ -2,6 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Identity.Application.Features.Authentication.Register;
 using ThreatFusion.Identity.Application.Features.Authentication.Login;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ThreatFusion.Identity.API.Controllers;
 
@@ -78,4 +81,41 @@ public sealed class AuthController : ControllerBase
             }
         });
     }
+    
+    [Authorize]
+    [HttpGet]
+    [Route("Me")]
+    [ActionName("دریافت اطلاعات کاربر جاری")]
+    public IActionResult Me()
+    {
+        var userId =
+            User.FindFirstValue(
+                JwtRegisteredClaimNames.Sub);
+
+        var email =
+            User.FindFirstValue(
+                JwtRegisteredClaimNames.Email);
+
+        var firstName =
+            User.FindFirstValue(
+                JwtRegisteredClaimNames.GivenName);
+
+        var lastName =
+            User.FindFirstValue(
+                JwtRegisteredClaimNames.FamilyName);
+
+        var roles = User.FindAll("role")
+            .Select(claim => claim.Value)
+            .ToArray();
+
+        return Ok(new
+        {
+            UserId = userId,
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            Roles = roles
+        });
+    }
+    
 }
