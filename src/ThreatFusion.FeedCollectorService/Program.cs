@@ -2,22 +2,31 @@ using ThreatFusion.FeedCollectorService;
 using ThreatFusion.FeedCollectorService.Providers;
 using ThreatFusion.FeedCollectorService.Services;
 
-var builder = Host.CreateApplicationBuilder(args);
+var builder =
+    Host.CreateApplicationBuilder(args);
 
-builder.Services.AddSingleton<IThreatFeedProvider, MockThreatFeedProvider>();
+var gatewayBaseUrl =
+    builder.Configuration["Gateway:BaseUrl"]
+    ?? throw new InvalidOperationException(
+        "Gateway BaseUrl is not configured.");
 
-builder.Services.AddHttpClient<ThreatApiClient>((serviceProvider, client) =>
-{
-    var configuration =
-        serviceProvider.GetRequiredService<IConfiguration>();
+builder.Services.AddSingleton<
+    IThreatFeedProvider,
+    MockThreatFeedProvider>();
 
-    var baseUrl =
-        configuration["ThreatApi:BaseUrl"]
-        ?? throw new InvalidOperationException(
-            "ThreatApi BaseUrl is not configured.");
+builder.Services.AddHttpClient<IdentityApiClient>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(gatewayBaseUrl);
+    });
 
-    client.BaseAddress = new Uri(baseUrl);
-});
+builder.Services.AddHttpClient<ThreatApiClient>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(gatewayBaseUrl);
+    });
 
 builder.Services.AddHostedService<Worker>();
 

@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using ThreatFusion.FeedCollectorService.Models;
@@ -7,45 +8,57 @@ namespace ThreatFusion.FeedCollectorService.Services;
 public sealed class ThreatApiClient
 {
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
+    private readonly IdentityApiClient _identityApiClient;
 
     public ThreatApiClient(
         HttpClient httpClient,
-        IConfiguration configuration)
+        IdentityApiClient identityApiClient)
     {
         _httpClient = httpClient;
-        _configuration = configuration;
+        _identityApiClient = identityApiClient;
     }
 
-    public async Task SendIndicatorAsync(
+    public async Task<bool> SendIndicatorAsync(
         ThreatIndicatorRequest indicator,
         CancellationToken cancellationToken)
     {
-        var token = _configuration["ThreatApi:Token"];
+        var accessToken =
+            await _identityApiClient
+                .GetAccessTokenAsync(
+                    cancellationToken);
 
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            throw new InvalidOperationException(
-                "Threat API token is not configured.");
-        }
+        using var request =
+            new HttpRequestMessage(
+                HttpMethod.Post,
+                "/threat/api/threat-indicators/CreateThreatIndicator");
 
-        _httpClient.DefaultRequestHeaders.Authorization =
+        request.Headers.Authorization =
             new AuthenticationHeaderValue(
                 "Bearer",
-                token);
+                accessToken);
+
+        request.Content =
+            JsonContent.Create(indicator);
 
         var response =
-            await _httpClient.PostAsJsonAsync(
-                "/api/threat-indicators/CreateThreatIndicator",
-                indicator,
+            await _httpClient.SendAsync(
+                request,
                 cancellationToken);
 
-        if (response.StatusCode ==
-            System.Net.HttpStatusCode.BadRequest)
+        if (response.IsSuccessStatusCode)
         {
-            return;
+            return true;
+        }
+
+        // Our Threat API currently uses BadRequest
+        // when an IOC already exists.
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            return false;
         }
 
         response.EnsureSuccessStatusCode();
+
+        return false;
     }
 }
