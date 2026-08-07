@@ -1,0 +1,58 @@
+using Microsoft.EntityFrameworkCore;
+using ThreatFusion.Threat.Domain.Entities;
+using ThreatFusion.Threat.Application.Abstractions;
+
+namespace ThreatFusion.Threat.Infrastructure.Persistence;
+
+public sealed class ThreatDbContext : DbContext, IThreatDbContext
+{
+    public ThreatDbContext(
+        DbContextOptions<ThreatDbContext> options)
+        : base(options)
+    {
+    }
+
+    public DbSet<ThreatIndicator> ThreatIndicators =>
+        Set<ThreatIndicator>();
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.Entity<ThreatIndicator>(entity =>
+        {
+            entity.ToTable("ThreatIndicators");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Value)
+                .HasMaxLength(2048)
+                .IsRequired();
+
+            entity.Property(x => x.SourceName)
+                .HasMaxLength(200)
+                .IsRequired();
+
+            entity.Property(x => x.Description)
+                .HasMaxLength(2000);
+
+            entity.Property(x => x.Type)
+                .IsRequired();
+
+            entity.Property(x => x.Severity)
+                .IsRequired();
+
+            entity.Property(x => x.Confidence)
+                .IsRequired();
+
+            entity.HasIndex(x => new
+            {
+                x.Type,
+                x.Value
+            })
+            .IsUnique();
+
+            entity.HasQueryFilter(x => !x.IsDeleted);
+        });
+    }
+}
