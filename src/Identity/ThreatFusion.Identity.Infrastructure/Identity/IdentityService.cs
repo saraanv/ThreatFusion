@@ -8,11 +8,16 @@ namespace ThreatFusion.Identity.Infrastructure.Identity;
 public sealed class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator;
     public IdentityService(
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IJwtTokenGenerator jwtTokenGenerator)
     {
         _userManager = userManager;
+        _signInManager = signInManager;
+        _jwtTokenGenerator = jwtTokenGenerator;
     }
 
     public async Task<RegisterUserResult> RegisterAsync(string firstName, string lastName, string email, string password, CancellationToken cancellationToken)
@@ -49,5 +54,62 @@ public sealed class IdentityService : IIdentityService
         }
 
         return RegisterUserResult.Success(user.Id);
+    }
+
+    public async Task<LoginUserResult> LoginAsync(
+        string email,
+        string password,
+        CancellationToken cancellationToken)
+    {
+        var normalizedEmail = email.Trim();
+
+        var user =
+            await _userManager.FindByEmailAsync(
+                normalizedEmail);
+
+        if (user is null ||
+            user.IsDeleted ||
+            !user.IsActive)
+        {
+            return LoginUserResult.Failure(
+                "Invalid email or password.");
+        }
+
+        var signInResult =
+            await _signInManager.CheckPasswordSignInAsync(
+                user,
+                password,
+                lockoutOnFailure: true);
+
+        if (signInResult.IsLockedOut)
+        {
+            return LoginUserResult.Failure(
+                "The account is temporarily locked.");
+        }
+
+        if (!signInResult.Succeeded)
+        {
+            return LoginUserResult.Failure(
+                "Invalid email or password.");
+        }
+
+        var roles =
+            await _userManager.GetRolesAsync(user);
+
+        var token =
+            await _jwtTokenGenerator.GenerateAsync(
+                user.Id,
+                user.Email!,
+                user.FirstName,
+                user.LastName,
+                roles);
+
+        return LoginUserResult.Success(
+            token.AccessToken,
+            token.ExpiresAtUtc,
+            user.Id,
+            user.FirstName,
+            user.LastName,
+            user.Email!);
     }
 }

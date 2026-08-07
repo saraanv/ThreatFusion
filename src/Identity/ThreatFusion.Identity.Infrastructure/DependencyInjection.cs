@@ -44,6 +44,15 @@ public static class DependencyInjection
             .AddSignInManager()
             .AddDefaultTokenProviders();
         services.AddScoped<IIdentityService, IdentityService>();
+        
+        services.Configure<JwtOptions>(
+            configuration.GetSection(
+                JwtOptions.SectionName));
+
+        services.AddScoped<
+            IJwtTokenGenerator,
+            JwtTokenGenerator>();
+
         return services;
     }
 }
