@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.Create;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.Search;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ThreatFusion.Threat.API.Controllers;
 
@@ -16,7 +17,8 @@ public sealed class ThreatIndicatorsController : ControllerBase
     {
         _sender = sender;
     }
-
+    
+    [Authorize(Roles = "Analyst,Admin")]
     [HttpPost]
     [Route("CreateThreatIndicator")]
     [ActionName("ثبت شاخص تهدید")]
@@ -46,6 +48,7 @@ public sealed class ThreatIndicatorsController : ControllerBase
             });
     }
 
+    [Authorize]
     [HttpGet]
     [Route("SearchThreatIndicator")]
     [ActionName("جستجوی شاخص تهدید")]
