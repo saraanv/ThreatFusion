@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.Create;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.Search;
 using Microsoft.AspNetCore.Authorization;
+using ThreatFusion.Threat.Application.Features.ThreatIndicators.GetList;
 
 namespace ThreatFusion.Threat.API.Controllers;
 
@@ -59,6 +60,22 @@ public sealed class ThreatIndicatorsController : ControllerBase
             new SearchThreatIndicatorQuery(value),
             cancellationToken);
     
+        return Ok(result);
+    }
+    
+    [Authorize]
+    [HttpGet]
+    [Route("GetThreatIndicators")]
+    [ActionName("دریافت لیست شاخص‌های تهدید")]
+    public async Task<IActionResult> GetThreatIndicators(
+        [FromQuery] GetThreatIndicatorsQuery query,
+        CancellationToken cancellationToken)
+    {
+        var result =
+            await _sender.Send(
+                query,
+                cancellationToken);
+
         return Ok(result);
     }
 }
