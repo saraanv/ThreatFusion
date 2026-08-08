@@ -22,6 +22,7 @@ F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.FileSystemGlobbing.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Hosting.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Http.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Logging.Configuration.dll
@@ -32,6 +33,7 @@ F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\System.Diagnostics.EventLog.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.Messages.dll
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
@@ -47,5 +49,3 @@ F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\refint\Th
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.pdb
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ThreatFusion.FeedCollectorService.genruntimeconfig.cache
 F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\obj\Debug\net8.0\ref\ThreatFusion.FeedCollectorService.dll
-F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\Microsoft.Extensions.Http.dll
-F:\ThreatFusion\src\ThreatFusion.FeedCollectorService\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
