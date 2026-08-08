@@ -21,21 +21,40 @@ public sealed class CisaKevFeedProvider : IThreatFeedProvider
         GetIndicatorsAsync(
             CancellationToken cancellationToken)
     {
-        var response =
-            await _httpClient.GetFromJsonAsync<CisaKevResponse>(
+        using var response =
+            await _httpClient.GetAsync(
                 "/sites/default/files/feeds/known_exploited_vulnerabilities.json",
                 cancellationToken);
 
-        if (response is null)
+        if (!response.IsSuccessStatusCode)
+        {
+            var body =
+                await response.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            _logger.LogError(
+                "CISA KEV request failed. Status: {StatusCode}, Body: {Body}",
+                response.StatusCode,
+                body);
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        var cisaResponse =
+            await response.Content
+                .ReadFromJsonAsync<CisaKevResponse>(
+                    cancellationToken: cancellationToken);
+
+        if (cisaResponse is null)
         {
             return [];
         }
 
         _logger.LogInformation(
             "CISA KEV returned {Count} vulnerabilities.",
-            response.Vulnerabilities.Count);
+            cisaResponse.Vulnerabilities.Count);
 
-        return response.Vulnerabilities
+        return cisaResponse.Vulnerabilities
             .OrderByDescending(x => x.DateAdded)
             .Take(10)
             .Select(vulnerability =>
@@ -50,7 +69,7 @@ public sealed class CisaKevFeedProvider : IThreatFeedProvider
                     FirstSeenUtc:
                     vulnerability.DateAdded,
                     LastSeenUtc:
-                    response.DateReleased))
+                    cisaResponse.DateReleased))
             .ToList();
     }
 

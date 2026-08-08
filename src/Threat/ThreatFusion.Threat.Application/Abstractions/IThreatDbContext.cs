@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ThreatFusion.Threat.Domain.Entities;
 
 namespace ThreatFusion.Threat.Application.Abstractions;
+using ThreatFusion.Threat.Domain.Entities;
 
 public interface IThreatDbContext
 {
@@ -9,4 +10,5 @@ public interface IThreatDbContext
 
     Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default);
+    DbSet<ThreatFeedSync> ThreatFeedSyncs { get; }
 }

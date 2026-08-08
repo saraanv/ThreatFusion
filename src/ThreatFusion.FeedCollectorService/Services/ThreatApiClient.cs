@@ -61,4 +61,34 @@ public sealed class ThreatApiClient
 
         return false;
     }
+    
+    public async Task RegisterSyncAsync(
+        ThreatFeedSyncRequest sync,
+        CancellationToken cancellationToken)
+    {
+        var accessToken =
+            await _identityApiClient
+                .GetAccessTokenAsync(
+                    cancellationToken);
+
+        using var request =
+            new HttpRequestMessage(
+                HttpMethod.Post,
+                "/threat/api/threat-feeds/RegisterSync");
+
+        request.Headers.Authorization =
+            new AuthenticationHeaderValue(
+                "Bearer",
+                accessToken);
+
+        request.Content =
+            JsonContent.Create(sync);
+
+        var response =
+            await _httpClient.SendAsync(
+                request,
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
 }

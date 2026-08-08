@@ -4086,6 +4086,7 @@
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {
             "F:\\ThreatFusion\\src\\Identity\\ThreatFusion.Identity.Application\\ThreatFusion.Identity.Application.csproj": {
@@ -4110,6 +4111,7 @@
     },
     "frameworks": {
       "net8.0": {
+        "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
