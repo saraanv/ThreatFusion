@@ -4,6 +4,12 @@ namespace ThreatFusion.FeedCollectorService.Services.Providers.Nvd;
 
 public sealed class NvdResponse
 {
+    [JsonPropertyName("resultsPerPage")]
+    public int ResultsPerPage { get; set; }
+
+    [JsonPropertyName("startIndex")]
+    public int StartIndex { get; set; }
+
     [JsonPropertyName("totalResults")]
     public int TotalResults { get; set; }
 
