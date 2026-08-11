@@ -65,6 +65,17 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
                 entity.Property(x => x.ErrorMessage)
                     .HasMaxLength(2000);
             });
+            entity.Property(x => x.CvssVersion)
+                .HasMaxLength(20);
+
+            entity.Property(x => x.CvssVector)
+                .HasMaxLength(500);
+
+            entity.Property(x => x.CweId)
+                .HasMaxLength(50);
+
+            entity.Property(x => x.ReferenceUrl)
+                .HasMaxLength(2048);
         });
     }
 }

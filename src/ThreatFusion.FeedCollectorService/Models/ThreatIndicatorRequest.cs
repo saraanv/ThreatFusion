@@ -8,4 +8,9 @@ public sealed record ThreatIndicatorRequest(
     string SourceName,
     string? Description,
     DateTime? FirstSeenUtc,
-    DateTime? LastSeenUtc);
+    DateTime? LastSeenUtc,
+    double? CvssScore,
+    string? CvssVersion,
+    string? CvssVector,
+    string? CweId,
+    string? ReferenceUrl);

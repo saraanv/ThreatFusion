@@ -24,4 +24,14 @@ public sealed class ThreatIndicator : BaseEntity
     public DateTime? ExpiresAtUtc { get; set; }
 
     public bool IsActive { get; set; } = true;
+    
+    public double? CvssScore { get; set; }
+    
+    public string? CvssVersion { get; set; }
+    
+    public string? CvssVector { get; set; }
+    
+    public string? CweId { get; set; }
+    
+    public string? ReferenceUrl { get; set; }
 }

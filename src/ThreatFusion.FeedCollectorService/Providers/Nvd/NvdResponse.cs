@@ -15,6 +15,14 @@ public sealed class NvdResponse
 
     [JsonPropertyName("vulnerabilities")]
     public List<NvdVulnerabilityItem> Vulnerabilities { get; set; } = [];
+    [JsonPropertyName("metrics")]
+    public NvdMetrics Metrics { get; set; } = new();
+
+    [JsonPropertyName("weaknesses")]
+    public List<NvdWeakness> Weaknesses { get; set; } = [];
+
+    [JsonPropertyName("references")]
+    public List<NvdReference> References { get; set; } = [];
 }
 
 public sealed class NvdVulnerabilityItem
@@ -36,6 +44,14 @@ public sealed class NvdCve
 
     [JsonPropertyName("descriptions")]
     public List<NvdDescription> Descriptions { get; set; } = [];
+    [JsonPropertyName("metrics")]
+    public NvdMetrics Metrics { get; set; } = new();
+
+    [JsonPropertyName("weaknesses")]
+    public List<NvdWeakness> Weaknesses { get; set; } = [];
+
+    [JsonPropertyName("references")]
+    public List<NvdReference> References { get; set; } = [];
 }
 
 public sealed class NvdDescription
@@ -45,4 +61,50 @@ public sealed class NvdDescription
 
     [JsonPropertyName("value")]
     public string Value { get; set; } = string.Empty;
+}
+public sealed class NvdMetrics
+{
+    [JsonPropertyName("cvssMetricV31")]
+    public List<NvdCvssMetricV31> CvssMetricV31 { get; set; } = [];
+}
+
+public sealed class NvdCvssMetricV31
+{
+    [JsonPropertyName("cvssData")]
+    public NvdCvssData CvssData { get; set; } = new();
+}
+
+public sealed class NvdCvssData
+{
+    [JsonPropertyName("version")]
+    public string Version { get; set; } = string.Empty;
+
+    [JsonPropertyName("vectorString")]
+    public string VectorString { get; set; } = string.Empty;
+
+    [JsonPropertyName("baseScore")]
+    public double BaseScore { get; set; }
+
+    [JsonPropertyName("baseSeverity")]
+    public string BaseSeverity { get; set; } = string.Empty;
+}
+public sealed class NvdWeakness
+{
+    [JsonPropertyName("description")]
+    public List<NvdWeaknessDescription> Description { get; set; } = [];
+}
+
+public sealed class NvdWeaknessDescription
+{
+    [JsonPropertyName("lang")]
+    public string Lang { get; set; } = string.Empty;
+
+    [JsonPropertyName("value")]
+    public string Value { get; set; } = string.Empty;
+}
+
+public sealed class NvdReference
+{
+    [JsonPropertyName("url")]
+    public string Url { get; set; } = string.Empty;
 }

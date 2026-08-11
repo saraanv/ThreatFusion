@@ -69,7 +69,13 @@ public sealed class CisaKevFeedProvider : IThreatFeedProvider
                     FirstSeenUtc:
                     vulnerability.DateAdded,
                     LastSeenUtc:
-                    cisaResponse.DateReleased))
+                    cisaResponse.DateReleased,
+
+                    CvssScore: null,
+                    CvssVersion: null,
+                    CvssVector: null,
+                    CweId: null,
+                    ReferenceUrl: null))
             .ToList();
     }
 

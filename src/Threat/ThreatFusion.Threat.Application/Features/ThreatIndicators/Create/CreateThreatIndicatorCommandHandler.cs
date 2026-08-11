@@ -73,7 +73,12 @@ public sealed class CreateThreatIndicatorCommandHandler
             CreatedAtUtc = DateTime.UtcNow,
 
             IsActive = true,
-            IsDeleted = false
+            IsDeleted = false,
+            CvssScore = request.CvssScore,
+            CvssVersion = request.CvssVersion,
+            CvssVector = request.CvssVector,
+            CweId = request.CweId,
+            ReferenceUrl = request.ReferenceUrl,
         };
 
         await _dbContext.ThreatIndicators.AddAsync(

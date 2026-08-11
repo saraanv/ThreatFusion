@@ -100,15 +100,45 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
                                 x.Lang == "en")
                             ?.Value;
 
+                    var cvss =
+                        item.Cve.Metrics.CvssMetricV31
+                            .FirstOrDefault()
+                            ?.CvssData;
+
+                    var cwe =
+                        item.Cve.Weaknesses
+                            .SelectMany(x => x.Description)
+                            .FirstOrDefault(x => x.Lang == "en")
+                            ?.Value;
+
+                    var referenceUrl =
+                        item.Cve.References
+                            .FirstOrDefault()
+                            ?.Url;
+                    
+                    var severity = cvss?.BaseSeverity switch
+                    {
+                        "LOW" => 1,
+                        "MEDIUM" => 2,
+                        "HIGH" => 3,
+                        "CRITICAL" => 4,
+                        _ => 0
+                    };
+                    
                     return new ThreatIndicatorRequest(
                         Type: 8,
                         Value: item.Cve.Id,
-                        Severity: 2,
+                        Severity: severity,
                         Confidence: 80,
                         SourceName: "NVD",
                         Description: description,
                         FirstSeenUtc: item.Cve.Published,
-                        LastSeenUtc: item.Cve.LastModified);
+                        LastSeenUtc: item.Cve.LastModified,
+                        CvssScore: cvss?.BaseScore,
+                        CvssVersion: cvss?.Version,
+                        CvssVector: cvss?.VectorString,
+                        CweId: cwe,
+                        ReferenceUrl: referenceUrl);
                 });
 
         allIndicators.AddRange(indicators);

@@ -11,5 +11,10 @@ public sealed record CreateThreatIndicatorCommand(
     string SourceName,
     string? Description,
     DateTime? FirstSeenUtc,
-    DateTime? LastSeenUtc)
+    DateTime? LastSeenUtc,
+    double? CvssScore,
+    string? CvssVersion,
+    string? CvssVector,
+    string? CweId,
+    string? ReferenceUrl)
     : IRequest<CreateThreatIndicatorResult>;

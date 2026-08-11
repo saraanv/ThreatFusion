@@ -21,7 +21,13 @@ public sealed class MockThreatFeedProvider
                 SourceName: "MockFeed",
                 Description: "Mock malicious domain",
                 FirstSeenUtc: now.AddDays(-2),
-                LastSeenUtc: now),
+                LastSeenUtc: now,
+
+                CvssScore: null,
+                CvssVersion: null,
+                CvssVector: null,
+                CweId: null,
+                ReferenceUrl: null),
 
             new ThreatIndicatorRequest(
                 Type: 4,
@@ -31,7 +37,13 @@ public sealed class MockThreatFeedProvider
                 SourceName: "MockFeed",
                 Description: "Mock malicious URL",
                 FirstSeenUtc: now.AddDays(-1),
-                LastSeenUtc: now)
+                LastSeenUtc: now,
+
+                CvssScore: null,
+                CvssVersion: null,
+                CvssVector: null,
+                CweId: null,
+                ReferenceUrl: null)
         ];
 
         return Task.FromResult(indicators);
