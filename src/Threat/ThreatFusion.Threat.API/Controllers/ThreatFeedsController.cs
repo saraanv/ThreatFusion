@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ThreatFusion.Threat.Application.Features.ThreatFeeds.GetLastSuccessfulSync;
 using ThreatFusion.Threat.Application
     .Features.ThreatFeeds.RegisterSync;
 
@@ -46,5 +47,19 @@ public sealed class ThreatFeedsController : ControllerBase
                 Message =
                     "Threat feed synchronization registered successfully."
             });
+    }
+    [Authorize(Roles = "Analyst,Admin")]
+    [HttpGet]
+    [Route("GetLastSuccessfulSync")]
+    [ActionName("دریافت آخرین همگام سازی موفق")]
+    public async Task<IActionResult> GetLastSuccessfulSync(
+        [FromQuery] string feedName,
+        CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(
+            new GetLastSuccessfulThreatFeedSyncQuery(feedName),
+            cancellationToken);
+
+        return Ok(result);
     }
 }
