@@ -9,15 +9,18 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
     private readonly HttpClient _httpClient;
     private readonly ILogger<NvdFeedProvider> _logger;
     private readonly IConfiguration _configuration;
+    private readonly ThreatFeedSyncClient _syncClient;
 
     public NvdFeedProvider(
         HttpClient httpClient,
         ILogger<NvdFeedProvider> logger,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        ThreatFeedSyncClient syncClient)
     {
         _httpClient = httpClient;
         _logger = logger;
         _configuration = configuration;
+        _syncClient = syncClient;
     }
 
     public async Task<IReadOnlyCollection<ThreatIndicatorRequest>>
@@ -43,7 +46,15 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
         }
 
         var endDate = DateTime.UtcNow;
-        var startDate = endDate.AddHours(-lookbackHours);
+
+        var lastSync =
+            await _syncClient.GetLastSuccessfulSyncAsync(
+                "NVD",
+                cancellationToken);
+
+        var startDate =
+            lastSync ??
+            endDate.AddHours(-lookbackHours);
 
         var startDateText =
             startDate.ToString(

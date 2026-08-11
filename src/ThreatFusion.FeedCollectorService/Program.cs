@@ -31,6 +31,27 @@ builder.Services.AddHttpClient<
             .ParseAdd("application/json");
     });
 
+builder.Services.AddHttpClient<ThreatFeedSyncClient>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(gatewayBaseUrl);
+    });
+
+builder.Services.AddHttpClient<IdentityApiClient>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(gatewayBaseUrl);
+    });
+
+builder.Services.AddHttpClient<ThreatFeedSyncClient>(
+    client =>
+    {
+        client.BaseAddress =
+            new Uri(gatewayBaseUrl);
+    });
+
 builder.Services.AddHttpClient<IdentityApiClient>(
     client =>
     {

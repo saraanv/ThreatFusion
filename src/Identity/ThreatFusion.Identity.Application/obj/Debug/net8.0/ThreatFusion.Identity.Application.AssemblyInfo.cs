@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ThreatFusion.Identity.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d66b685635f4b714006ce57c8a001f02fcb54e2d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1494ffadf172fd8de2b993d9c07b2223cd8ecc70")]
 [assembly: System.Reflection.AssemblyProductAttribute("ThreatFusion.Identity.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ThreatFusion.Identity.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
