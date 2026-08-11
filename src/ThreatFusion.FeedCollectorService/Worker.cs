@@ -7,9 +7,7 @@ namespace ThreatFusion.FeedCollectorService;
 public sealed class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-
     private readonly IThreatFeedProvider _feedProvider;
-
     private readonly ThreatApiClient _threatApiClient;
 
     public Worker(
@@ -22,126 +20,172 @@ public sealed class Worker : BackgroundService
         _threatApiClient = threatApiClient;
     }
 
-   protected override async Task ExecuteAsync(
-    CancellationToken stoppingToken)
-{
-    while (!stoppingToken.IsCancellationRequested)
+    protected override async Task ExecuteAsync(
+        CancellationToken stoppingToken)
     {
-        var startedAtUtc =
-            DateTime.UtcNow;
-
-        var importedCount = 0;
-        var skippedCount = 0;
-        var failedCount = 0;
-
-        IReadOnlyCollection<ThreatIndicatorRequest>
-            indicators = [];
-
-        string? errorMessage = null;
-
-        var isSuccessful = true;
-
-        try
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation(
-                "Threat feed collection started at {Time}",
-                startedAtUtc);
+            var startedAtUtc = DateTime.UtcNow;
 
-            indicators =
-                await _feedProvider.GetIndicatorsAsync(
-                    stoppingToken);
+            var createdCount = 0;
+            var updatedCount = 0;
+            var unchangedCount = 0;
+            var failedCount = 0;
 
-            foreach (var indicator in indicators)
+            IReadOnlyCollection<ThreatIndicatorRequest> indicators = [];
+
+            string? errorMessage = null;
+
+            var isSuccessful = true;
+
+            try
             {
-                try
+                _logger.LogInformation(
+                    "Threat feed collection started at {Time}",
+                    startedAtUtc);
+
+                indicators =
+                    await _feedProvider.GetIndicatorsAsync(
+                        stoppingToken);
+
+                foreach (var indicator in indicators)
                 {
-                    var created =
-                        await _threatApiClient
-                            .SendIndicatorAsync(
+                    try
+                    {
+                        var status =
+                            await _threatApiClient.SendIndicatorAsync(
                                 indicator,
                                 stoppingToken);
 
-                    if (created)
-                    {
-                        importedCount++;
+                        switch (status)
+                        {
+                            case "Created":
+                                createdCount++;
 
-                        _logger.LogInformation(
-                            "Indicator imported: {Value}",
+                                _logger.LogInformation(
+                                    "Indicator created: {Value}",
+                                    indicator.Value);
+
+                                break;
+
+                            case "Updated":
+                                updatedCount++;
+
+                                _logger.LogInformation(
+                                    "Indicator updated: {Value}",
+                                    indicator.Value);
+
+                                break;
+
+                            case "Unchanged":
+                                unchangedCount++;
+
+                                _logger.LogInformation(
+                                    "Indicator unchanged: {Value}",
+                                    indicator.Value);
+
+                                break;
+
+                            default:
+                                failedCount++;
+
+                                _logger.LogWarning(
+                                    "Unknown write status '{Status}' for indicator: {Value}",
+                                    status,
+                                    indicator.Value);
+
+                                break;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        failedCount++;
+
+                        _logger.LogError(
+                            exception,
+                            "Failed to process indicator: {Value}",
                             indicator.Value);
                     }
-                    else
-                    {
-                        skippedCount++;
-
-                        _logger.LogInformation(
-                            "Indicator skipped: {Value}",
-                            indicator.Value);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    failedCount++;
-
-                    _logger.LogError(
-                        exception,
-                        "Failed to import indicator: {Value}",
-                        indicator.Value);
                 }
             }
+            catch (Exception exception)
+            {
+                isSuccessful = false;
+
+                failedCount++;
+
+                errorMessage = exception.Message;
+
+                _logger.LogError(
+                    exception,
+                    "Threat feed collection failed.");
+            }
+
+            var completedAtUtc = DateTime.UtcNow;
+
+            try
+            {
+                var syncRequest =
+                    new ThreatFeedSyncRequest(
+                        FeedName: "NVD",
+                        StartedAtUtc: startedAtUtc,
+                        CompletedAtUtc: completedAtUtc,
+                        TotalFetched: indicators.Count,
+
+                        // Temporary mapping:
+                        // Created + Updated are considered imported
+                        ImportedCount:
+                            createdCount + updatedCount,
+
+                        // Unchanged is considered skipped
+                        SkippedCount:
+                            unchangedCount,
+
+                        FailedCount:
+                            failedCount,
+
+                        IsSuccessful:
+                            isSuccessful &&
+                            failedCount == 0,
+
+                        ErrorMessage:
+                            errorMessage);
+
+                await _threatApiClient.RegisterSyncAsync(
+                    syncRequest,
+                    stoppingToken);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(
+                    exception,
+                    "Failed to register threat feed synchronization.");
+            }
+
+            _logger.LogInformation(
+                "Threat feed collection completed. " +
+                "Fetched: {Fetched}, " +
+                "Created: {Created}, " +
+                "Updated: {Updated}, " +
+                "Unchanged: {Unchanged}, " +
+                "Failed: {Failed}",
+                indicators.Count,
+                createdCount,
+                updatedCount,
+                unchangedCount,
+                failedCount);
+
+            try
+            {
+                await Task.Delay(
+                    TimeSpan.FromMinutes(5),
+                    stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                // Worker is shutting down normally.
+                break;
+            }
         }
-        catch (Exception exception)
-        {
-            isSuccessful = false;
-            failedCount = 1;
-            errorMessage = exception.Message;
-
-            _logger.LogError(
-                exception,
-                "Threat feed collection failed.");
-        }
-
-        var completedAtUtc =
-            DateTime.UtcNow;
-
-        try
-        {
-            var syncRequest =
-                new ThreatFeedSyncRequest(
-                    FeedName: "NVD",
-                    StartedAtUtc: startedAtUtc,
-                    CompletedAtUtc: completedAtUtc,
-                    TotalFetched: indicators.Count,
-                    ImportedCount: importedCount,
-                    SkippedCount: skippedCount,
-                    FailedCount: failedCount,
-                    IsSuccessful:
-                        isSuccessful &&
-                        failedCount == 0,
-                    ErrorMessage: errorMessage);
-
-            await _threatApiClient.RegisterSyncAsync(
-                syncRequest,
-                stoppingToken);
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(
-                exception,
-                "Failed to register threat feed synchronization.");
-        }
-
-        _logger.LogInformation(
-            "Threat feed collection completed. " +
-            "Fetched: {Fetched}, Imported: {Imported}, " +
-            "Skipped: {Skipped}, Failed: {Failed}",
-            indicators.Count,
-            importedCount,
-            skippedCount,
-            failedCount);
-
-        await Task.Delay(
-            TimeSpan.FromMinutes(5),
-            stoppingToken);
     }
-}
 }

@@ -1,6 +1,5 @@
 using ThreatFusion.FeedCollectorService;
 using ThreatFusion.FeedCollectorService.Providers;
-using ThreatFusion.FeedCollectorService.Providers.CisaKev;
 using ThreatFusion.FeedCollectorService.Services;
 using ThreatFusion.FeedCollectorService.Services.Providers.Nvd;
 
@@ -19,6 +18,9 @@ builder.Services.AddHttpClient<
     {
         client.BaseAddress =
             new Uri("https://services.nvd.nist.gov");
+
+        client.Timeout =
+            TimeSpan.FromMinutes(5);
 
         client.DefaultRequestHeaders
             .UserAgent

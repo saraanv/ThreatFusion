@@ -39,13 +39,11 @@ public sealed class ThreatIndicatorsController : ControllerBase
             });
         }
     
-        return StatusCode(
-            StatusCodes.Status201Created,
-            new
-            {
-                result.IndicatorId,
-                Message = "Threat indicator created successfully."
-            });
+        return Ok(new
+        {
+            result.IndicatorId,
+            Status = result.Status?.ToString()
+        });
     }
 
     [Authorize]

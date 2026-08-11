@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+using System.Text.Json;
 using ThreatFusion.FeedCollectorService.Models;
 using ThreatFusion.FeedCollectorService.Providers;
 
@@ -21,147 +21,169 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
     }
 
     public async Task<IReadOnlyCollection<ThreatIndicatorRequest>>
-    GetIndicatorsAsync(
-        CancellationToken cancellationToken)
-{
-    var lookbackHours =
-        _configuration.GetValue<int>(
-            "Nvd:LookbackHours");
-
-    var resultsPerPage =
-        _configuration.GetValue<int>(
-            "Nvd:ResultsPerPage");
-
-    if (lookbackHours <= 0)
+        GetIndicatorsAsync(
+            CancellationToken cancellationToken)
     {
-        lookbackHours = 24;
-    }
+        var lookbackHours =
+            _configuration.GetValue<int>(
+                "Nvd:LookbackHours");
 
-    if (resultsPerPage <= 0)
-    {
-        resultsPerPage = 20;
-    }
+        var resultsPerPage =
+            _configuration.GetValue<int>(
+                "Nvd:ResultsPerPage");
 
-    var endDate = DateTime.UtcNow;
-    var startDate = endDate.AddHours(-lookbackHours);
-
-    var startDateText =
-        startDate.ToString(
-            "yyyy-MM-ddTHH:mm:ss.fff");
-
-    var endDateText =
-        endDate.ToString(
-            "yyyy-MM-ddTHH:mm:ss.fff");
-
-    var allIndicators =
-        new List<ThreatIndicatorRequest>();
-
-    var startIndex = 0;
-    var totalResults = int.MaxValue;
-
-    while (startIndex < totalResults)
-    {
-        var url =
-            $"/rest/json/cves/2.0" +
-            $"?pubStartDate={Uri.EscapeDataString(startDateText)}" +
-            $"&pubEndDate={Uri.EscapeDataString(endDateText)}" +
-            $"&resultsPerPage={resultsPerPage}" +
-            $"&startIndex={startIndex}";
-
-        _logger.LogInformation(
-            "Fetching NVD page. StartIndex: {StartIndex}",
-            startIndex);
-
-        var response =
-            await _httpClient.GetFromJsonAsync<NvdResponse>(
-                url,
-                cancellationToken);
-
-        if (response is null)
+        if (lookbackHours <= 0)
         {
-            break;
+            lookbackHours = 24;
         }
 
-        totalResults =
-            response.TotalResults;
+        if (resultsPerPage <= 0)
+        {
+            resultsPerPage = 100;
+        }
 
-        _logger.LogInformation(
-            "NVD page returned {Count}. Total results: {TotalResults}.",
-            response.Vulnerabilities.Count,
-            totalResults);
+        var endDate = DateTime.UtcNow;
+        var startDate = endDate.AddHours(-lookbackHours);
 
-        var indicators =
-            response.Vulnerabilities
-                .Select(item =>
-                {
-                    var description =
-                        item.Cve.Descriptions
-                            .FirstOrDefault(x =>
-                                x.Lang == "en")
-                            ?.Value;
+        var startDateText =
+            startDate.ToString(
+                "yyyy-MM-ddTHH:mm:ss.fff");
 
-                    var cvss =
-                        item.Cve.Metrics.CvssMetricV31
-                            .FirstOrDefault()
-                            ?.CvssData;
+        var endDateText =
+            endDate.ToString(
+                "yyyy-MM-ddTHH:mm:ss.fff");
 
-                    var cwe =
-                        item.Cve.Weaknesses
-                            .SelectMany(x => x.Description)
-                            .FirstOrDefault(x => x.Lang == "en")
-                            ?.Value;
+        var allIndicators =
+            new List<ThreatIndicatorRequest>();
 
-                    var referenceUrl =
-                        item.Cve.References
-                            .FirstOrDefault()
-                            ?.Url;
-                    
-                    var severity = cvss?.BaseSeverity switch
+        var startIndex = 0;
+        var totalResults = int.MaxValue;
+
+        while (startIndex < totalResults)
+        {
+            var url =
+                $"/rest/json/cves/2.0" +
+                $"?pubStartDate={Uri.EscapeDataString(startDateText)}" +
+                $"&pubEndDate={Uri.EscapeDataString(endDateText)}" +
+                $"&resultsPerPage={resultsPerPage}" +
+                $"&startIndex={startIndex}";
+
+            _logger.LogInformation(
+                "Fetching NVD page. StartIndex: {StartIndex}",
+                startIndex);
+
+            using var httpResponse =
+                await _httpClient.GetAsync(
+                    url,
+                    cancellationToken);
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var json =
+                await httpResponse.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            var nvdResponse =
+                JsonSerializer.Deserialize<NvdResponse>(
+                    json,
+                    new JsonSerializerOptions
                     {
-                        "LOW" => 1,
-                        "MEDIUM" => 2,
-                        "HIGH" => 3,
-                        "CRITICAL" => 4,
-                        _ => 0
-                    };
-                    
-                    return new ThreatIndicatorRequest(
-                        Type: 8,
-                        Value: item.Cve.Id,
-                        Severity: severity,
-                        Confidence: 80,
-                        SourceName: "NVD",
-                        Description: description,
-                        FirstSeenUtc: item.Cve.Published,
-                        LastSeenUtc: item.Cve.LastModified,
-                        CvssScore: cvss?.BaseScore,
-                        CvssVersion: cvss?.Version,
-                        CvssVector: cvss?.VectorString,
-                        CweId: cwe,
-                        ReferenceUrl: referenceUrl);
-                });
+                        PropertyNameCaseInsensitive = true
+                    });
 
-        allIndicators.AddRange(indicators);
+            if (nvdResponse is null)
+            {
+                _logger.LogWarning(
+                    "NVD returned an empty or invalid response.");
 
-        if (response.Vulnerabilities.Count == 0)
-        {
-            break;
+                break;
+            }
+
+            totalResults =
+                nvdResponse.TotalResults;
+
+            _logger.LogInformation(
+                "NVD page returned {Count}. Total results: {TotalResults}.",
+                nvdResponse.Vulnerabilities.Count,
+                totalResults);
+
+            var indicators =
+                nvdResponse.Vulnerabilities
+                    .Select(item =>
+                    {
+                        var description =
+                            item.Cve.Descriptions
+                                .FirstOrDefault(x =>
+                                    x.Lang == "en")
+                                ?.Value;
+
+                        var cvss =
+                            item.Cve.Metrics.CvssMetricV31
+                                .FirstOrDefault()
+                                ?.CvssData;
+
+                        var cwe =
+                            item.Cve.Weaknesses
+                                .SelectMany(x =>
+                                    x.Description)
+                                .FirstOrDefault(x =>
+                                    x.Lang == "en")
+                                ?.Value;
+
+                        var referenceUrl =
+                            item.Cve.References
+                                .FirstOrDefault()
+                                ?.Url;
+
+                        var severity =
+                            cvss?.BaseSeverity switch
+                            {
+                                "LOW" => 1,
+                                "MEDIUM" => 2,
+                                "HIGH" => 3,
+                                "CRITICAL" => 4,
+                                _ => 0
+                            };
+
+                        return new ThreatIndicatorRequest(
+                            Type: 8,
+                            Value: item.Cve.Id,
+                            Severity: severity,
+                            Confidence: 80,
+                            SourceName: "NVD",
+                            Description: description,
+                            FirstSeenUtc: item.Cve.Published,
+                            LastSeenUtc: item.Cve.LastModified,
+                            CvssScore: cvss?.BaseScore,
+                            CvssVersion: cvss?.Version,
+                            CvssVector: cvss?.VectorString,
+                            CweId: cwe,
+                            ReferenceUrl: referenceUrl);
+                    })
+                    .ToList();
+
+            allIndicators.AddRange(indicators);
+
+            if (nvdResponse.Vulnerabilities.Count == 0)
+            {
+                break;
+            }
+
+            startIndex +=
+                nvdResponse.ResultsPerPage;
+
+            if (startIndex < totalResults)
+            {
+                await Task.Delay(
+                    TimeSpan.FromSeconds(6),
+                    cancellationToken);
+            }
         }
 
-        startIndex += response.ResultsPerPage;
+        _logger.LogInformation(
+            "NVD collection completed. Total collected: {Count}",
+            allIndicators.Count);
 
-        if (startIndex < totalResults)
-        {
-            await Task.Delay(
-                TimeSpan.FromSeconds(6),
-                cancellationToken);
-        }
+        return allIndicators;
     }
-
-    _logger.LogInformation(
-        "NVD collection completed. Total collected: {Count}",
-        allIndicators.Count);
-
-    return allIndicators;
-}
 }

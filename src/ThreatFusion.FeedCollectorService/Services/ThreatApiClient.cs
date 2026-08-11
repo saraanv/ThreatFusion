@@ -18,7 +18,7 @@ public sealed class ThreatApiClient
         _identityApiClient = identityApiClient;
     }
 
-    public async Task<bool> SendIndicatorAsync(
+    public async Task<string> SendIndicatorAsync(
         ThreatIndicatorRequest indicator,
         CancellationToken cancellationToken)
     {
@@ -45,21 +45,20 @@ public sealed class ThreatApiClient
                 request,
                 cancellationToken);
 
-        if (response.IsSuccessStatusCode)
-        {
-            return true;
-        }
-
-        // Our Threat API currently uses BadRequest
-        // when an IOC already exists.
-        if (response.StatusCode == HttpStatusCode.BadRequest)
-        {
-            return false;
-        }
-
         response.EnsureSuccessStatusCode();
 
-        return false;
+        var result =
+            await response.Content
+                .ReadFromJsonAsync<ThreatIndicatorWriteResponse>(
+                    cancellationToken);
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "Threat API returned an invalid response.");
+        }
+
+        return result.Status;
     }
     
     public async Task RegisterSyncAsync(
