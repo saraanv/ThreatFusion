@@ -1,5 +1,4 @@
 using ThreatFusion.Threat.Domain.Common;
-using ThreatFusion.Threat.Domain.Enums;
 
 namespace ThreatFusion.Threat.Domain.Entities;
 
@@ -13,9 +12,11 @@ public sealed class ThreatFeedSync : BaseEntity
 
     public int TotalFetched { get; set; }
 
-    public int ImportedCount { get; set; }
+    public int CreatedCount { get; set; }
 
-    public int SkippedCount { get; set; }
+    public int UpdatedCount { get; set; }
+
+    public int UnchangedCount { get; set; }
 
     public int FailedCount { get; set; }
 

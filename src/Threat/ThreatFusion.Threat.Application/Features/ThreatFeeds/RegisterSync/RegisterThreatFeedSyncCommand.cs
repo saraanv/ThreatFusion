@@ -8,8 +8,9 @@ public sealed record RegisterThreatFeedSyncCommand(
     DateTime StartedAtUtc,
     DateTime CompletedAtUtc,
     int TotalFetched,
-    int ImportedCount,
-    int SkippedCount,
+    int CreatedCount,
+    int UpdatedCount,
+    int UnchangedCount,
     int FailedCount,
     bool IsSuccessful,
     string? ErrorMessage)

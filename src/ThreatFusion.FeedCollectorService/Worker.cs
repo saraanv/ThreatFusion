@@ -132,24 +132,17 @@ public sealed class Worker : BackgroundService
                         CompletedAtUtc: completedAtUtc,
                         TotalFetched: indicators.Count,
 
-                        // Temporary mapping:
-                        // Created + Updated are considered imported
-                        ImportedCount:
-                            createdCount + updatedCount,
-
-                        // Unchanged is considered skipped
-                        SkippedCount:
-                            unchangedCount,
-
-                        FailedCount:
-                            failedCount,
+                        CreatedCount: createdCount,
+                        UpdatedCount: updatedCount,
+                        UnchangedCount: unchangedCount,
+                        FailedCount: failedCount,
 
                         IsSuccessful:
-                            isSuccessful &&
-                            failedCount == 0,
+                        isSuccessful &&
+                        failedCount == 0,
 
                         ErrorMessage:
-                            errorMessage);
+                        errorMessage);
 
                 await _threatApiClient.RegisterSyncAsync(
                     syncRequest,

@@ -91,8 +91,9 @@ public sealed class GetThreatDashboardQueryHandler
                     x.StartedAtUtc,
                     x.CompletedAtUtc,
                     x.TotalFetched,
-                    x.ImportedCount,
-                    x.SkippedCount,
+                    x.CreatedCount,
+                    x.UpdatedCount,
+                    x.UnchangedCount,
                     x.FailedCount,
                     x.IsSuccessful))
                 .FirstOrDefaultAsync(cancellationToken);

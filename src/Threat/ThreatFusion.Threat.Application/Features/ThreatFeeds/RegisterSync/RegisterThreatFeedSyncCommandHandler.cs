@@ -36,16 +36,16 @@ public sealed class RegisterThreatFeedSyncCommandHandler
             CompletedAtUtc = request.CompletedAtUtc,
 
             TotalFetched = request.TotalFetched,
-            ImportedCount = request.ImportedCount,
-            SkippedCount = request.SkippedCount,
+
+            CreatedCount = request.CreatedCount,
+            UpdatedCount = request.UpdatedCount,
+            UnchangedCount = request.UnchangedCount,
             FailedCount = request.FailedCount,
 
             IsSuccessful = request.IsSuccessful,
-
             ErrorMessage = request.ErrorMessage,
 
             CreatedAtUtc = DateTime.UtcNow,
-
             IsDeleted = false
         };
 
