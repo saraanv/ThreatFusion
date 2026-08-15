@@ -1,6 +1,6 @@
-namespace ThreatFusion.Threat.Application.Features.ThreatIndicators.GetList;
+namespace ThreatFusion.Threat.Application.Features.ThreatIndicators.GetById;
 
-public sealed record ThreatIndicatorListItemDto(
+public sealed record ThreatIndicatorDetailsDto(
     long Id,
     string Type,
     string Value,
@@ -15,4 +15,5 @@ public sealed record ThreatIndicatorListItemDto(
     string? CvssVector,
     string? CweId,
     string? ReferenceUrl,
-    bool IsActive);
+    bool IsActive
+);

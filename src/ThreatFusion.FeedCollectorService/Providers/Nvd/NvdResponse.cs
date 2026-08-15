@@ -66,9 +66,28 @@ public sealed class NvdMetrics
 {
     [JsonPropertyName("cvssMetricV31")]
     public List<NvdCvssMetricV31> CvssMetricV31 { get; set; } = [];
+
+    [JsonPropertyName("cvssMetricV30")]
+    public List<NvdCvssMetricV30> CvssMetricV30 { get; set; } = [];
+
+    [JsonPropertyName("cvssMetricV2")]
+    public List<NvdCvssMetricV2> CvssMetricV2 { get; set; } = [];
 }
 
 public sealed class NvdCvssMetricV31
+{
+    [JsonPropertyName("cvssData")]
+    public NvdCvssData CvssData { get; set; } = new();
+}
+
+public sealed class NvdCvssMetricV30
+{
+    [JsonPropertyName("cvssData")]
+    public NvdCvssData CvssData { get; set; } = new();
+}
+
+
+public sealed class NvdCvssMetricV2
 {
     [JsonPropertyName("cvssData")]
     public NvdCvssData CvssData { get; set; } = new();

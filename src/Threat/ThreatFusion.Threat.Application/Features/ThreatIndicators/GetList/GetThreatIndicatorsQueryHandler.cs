@@ -110,8 +110,14 @@ public sealed class GetThreatIndicatorsQueryHandler
                         x.Severity.ToString(),
                         x.Confidence,
                         x.SourceName,
+                        x.Description,
                         x.FirstSeenUtc,
                         x.LastSeenUtc,
+                        x.CvssScore,
+                        x.CvssVersion,
+                        x.CvssVector,
+                        x.CweId,
+                        x.ReferenceUrl,
                         x.IsActive))
                 .ToList();
 

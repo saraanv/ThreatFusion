@@ -131,6 +131,14 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
                         var cvss =
                             item.Cve.Metrics.CvssMetricV31
                                 .FirstOrDefault()
+                                ?.CvssData
+                            ??
+                            item.Cve.Metrics.CvssMetricV30
+                                .FirstOrDefault()
+                                ?.CvssData
+                            ??
+                            item.Cve.Metrics.CvssMetricV2
+                                .FirstOrDefault()
                                 ?.CvssData;
 
                         var cwe =
