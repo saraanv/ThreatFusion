@@ -76,6 +76,32 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
 
             entity.Property(x => x.ReferenceUrl)
                 .HasMaxLength(2048);
+            builder.Entity<ThreatIndicatorRelation>(entity =>
+            {
+                entity.ToTable("ThreatIndicatorRelations");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Description)
+                    .HasMaxLength(1000);
+
+                entity.Property(x => x.Confidence)
+                    .IsRequired();
+
+                entity.Property(x => x.IsActive)
+                    .IsRequired();
+
+                entity.HasIndex(x => new
+                    {
+                        x.SourceIndicatorId,
+                        x.TargetIndicatorId,
+                        x.RelationType
+                    })
+                    .IsUnique();
+            });
         });
     }
+    public DbSet<ThreatIndicatorRelation> ThreatIndicatorRelations =>
+        Set<ThreatIndicatorRelation>();
+    
 }

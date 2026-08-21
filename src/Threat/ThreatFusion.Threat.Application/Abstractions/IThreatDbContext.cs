@@ -11,4 +11,5 @@ public interface IThreatDbContext
     Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default);
     DbSet<ThreatFeedSync> ThreatFeedSyncs { get; }
+    DbSet<ThreatIndicatorRelation> ThreatIndicatorRelations { get; }
 }
