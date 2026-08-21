@@ -6,6 +6,8 @@ public sealed record ThreatIndicatorDetailsDto(
     string Value,
     string Severity,
     int Confidence,
+    double RiskScore,
+    string RiskLevel,
     string SourceName,
     string? Description,
     DateTime? FirstSeenUtc,
@@ -15,5 +17,4 @@ public sealed record ThreatIndicatorDetailsDto(
     string? CvssVector,
     string? CweId,
     string? ReferenceUrl,
-    bool IsActive
-);
+    bool IsActive);

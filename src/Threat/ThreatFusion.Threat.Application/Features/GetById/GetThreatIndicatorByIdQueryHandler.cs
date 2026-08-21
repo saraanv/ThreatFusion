@@ -4,7 +4,6 @@ using ThreatFusion.Threat.Application.Abstractions;
 
 namespace ThreatFusion.Threat.Application.Features.ThreatIndicators.GetById;
 
-
 public sealed class GetThreatIndicatorByIdQueryHandler
     : IRequestHandler<
         GetThreatIndicatorByIdQuery,
@@ -12,13 +11,11 @@ public sealed class GetThreatIndicatorByIdQueryHandler
 {
     private readonly IThreatDbContext _dbContext;
 
-
     public GetThreatIndicatorByIdQueryHandler(
         IThreatDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-
 
     public async Task<ThreatIndicatorDetailsDto?> Handle(
         GetThreatIndicatorByIdQuery request,
@@ -31,12 +28,10 @@ public sealed class GetThreatIndicatorByIdQueryHandler
                     x => x.Id == request.Id,
                     cancellationToken);
 
-
-        if (indicator == null)
+        if (indicator is null)
         {
             return null;
         }
-
 
         return new ThreatIndicatorDetailsDto(
             indicator.Id,
@@ -44,6 +39,10 @@ public sealed class GetThreatIndicatorByIdQueryHandler
             indicator.Value,
             indicator.Severity.ToString(),
             indicator.Confidence,
+
+            indicator.RiskScore,
+            indicator.RiskLevel.ToString(),
+
             indicator.SourceName,
             indicator.Description,
             indicator.FirstSeenUtc,

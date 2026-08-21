@@ -17,57 +17,53 @@ builder.Services.AddHttpClient<
     client =>
     {
         client.BaseAddress =
-            new Uri("https://services.nvd.nist.gov");
+            new Uri(
+                "https://services.nvd.nist.gov");
 
         client.Timeout =
             TimeSpan.FromMinutes(5);
 
         client.DefaultRequestHeaders
             .UserAgent
-            .ParseAdd("ThreatFusion/1.0");
+            .ParseAdd(
+                "ThreatFusion/1.0");
 
         client.DefaultRequestHeaders
             .Accept
-            .ParseAdd("application/json");
+            .ParseAdd(
+                "application/json");
     });
 
-builder.Services.AddHttpClient<ThreatFeedSyncClient>(
+builder.Services.AddHttpClient<
+    IdentityApiClient>(
     client =>
     {
         client.BaseAddress =
-            new Uri(gatewayBaseUrl);
+            new Uri(
+                gatewayBaseUrl);
     });
 
-builder.Services.AddHttpClient<IdentityApiClient>(
+builder.Services.AddHttpClient<
+    ThreatFeedSyncClient>(
     client =>
     {
         client.BaseAddress =
-            new Uri(gatewayBaseUrl);
+            new Uri(
+                gatewayBaseUrl);
     });
 
-builder.Services.AddHttpClient<ThreatFeedSyncClient>(
+builder.Services.AddHttpClient<
+    ThreatApiClient>(
     client =>
     {
         client.BaseAddress =
-            new Uri(gatewayBaseUrl);
-    });
-
-builder.Services.AddHttpClient<IdentityApiClient>(
-    client =>
-    {
-        client.BaseAddress =
-            new Uri(gatewayBaseUrl);
-    });
-
-builder.Services.AddHttpClient<ThreatApiClient>(
-    client =>
-    {
-        client.BaseAddress =
-            new Uri(gatewayBaseUrl);
+            new Uri(
+                gatewayBaseUrl);
     });
 
 builder.Services.AddHostedService<Worker>();
 
-var host = builder.Build();
+var host =
+    builder.Build();
 
 host.Run();

@@ -6,6 +6,8 @@ public sealed record ThreatIndicatorListItemDto(
     string Value,
     string Severity,
     int Confidence,
+    double RiskScore,
+    string RiskLevel,
     string SourceName,
     string? Description,
     DateTime? FirstSeenUtc,

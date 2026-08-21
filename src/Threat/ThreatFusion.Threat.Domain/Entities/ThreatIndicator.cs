@@ -34,4 +34,7 @@ public sealed class ThreatIndicator : BaseEntity
     public string? CweId { get; set; }
     
     public string? ReferenceUrl { get; set; }
+    public double RiskScore { get; set; }
+
+    public ThreatRiskLevel RiskLevel { get; set; }
 }

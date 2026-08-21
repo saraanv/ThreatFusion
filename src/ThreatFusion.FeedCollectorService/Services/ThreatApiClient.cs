@@ -1,4 +1,3 @@
-using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using ThreatFusion.FeedCollectorService.Models;
@@ -23,9 +22,8 @@ public sealed class ThreatApiClient
         CancellationToken cancellationToken)
     {
         var accessToken =
-            await _identityApiClient
-                .GetAccessTokenAsync(
-                    cancellationToken);
+            await _identityApiClient.GetAccessTokenAsync(
+                cancellationToken);
 
         using var request =
             new HttpRequestMessage(
@@ -40,12 +38,22 @@ public sealed class ThreatApiClient
         request.Content =
             JsonContent.Create(indicator);
 
-        var response =
+        using var response =
             await _httpClient.SendAsync(
                 request,
                 cancellationToken);
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody =
+                await response.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            throw new HttpRequestException(
+                $"Threat API returned {(int)response.StatusCode} " +
+                $"({response.StatusCode}) for indicator '{indicator.Value}'. " +
+                $"Response: {errorBody}");
+        }
 
         var result =
             await response.Content
@@ -60,15 +68,14 @@ public sealed class ThreatApiClient
 
         return result.Status;
     }
-    
+
     public async Task RegisterSyncAsync(
         ThreatFeedSyncRequest sync,
         CancellationToken cancellationToken)
     {
         var accessToken =
-            await _identityApiClient
-                .GetAccessTokenAsync(
-                    cancellationToken);
+            await _identityApiClient.GetAccessTokenAsync(
+                cancellationToken);
 
         using var request =
             new HttpRequestMessage(
@@ -83,11 +90,21 @@ public sealed class ThreatApiClient
         request.Content =
             JsonContent.Create(sync);
 
-        var response =
+        using var response =
             await _httpClient.SendAsync(
                 request,
                 cancellationToken);
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody =
+                await response.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            throw new HttpRequestException(
+                $"Threat API returned {(int)response.StatusCode} " +
+                $"({response.StatusCode}) while registering feed sync. " +
+                $"Response: {errorBody}");
+        }
     }
 }

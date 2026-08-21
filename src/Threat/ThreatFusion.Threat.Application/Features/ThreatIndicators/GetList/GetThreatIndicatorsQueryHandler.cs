@@ -109,6 +109,8 @@ public sealed class GetThreatIndicatorsQueryHandler
                         x.Value,
                         x.Severity.ToString(),
                         x.Confidence,
+                        x.RiskScore,
+                        x.RiskLevel.ToString(),
                         x.SourceName,
                         x.Description,
                         x.FirstSeenUtc,
