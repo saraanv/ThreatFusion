@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.Create;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.GetByIndicator;
+using ThreatFusion.Threat.Application.Features.ThreatRelations.GetGraph;
 
 namespace ThreatFusion.Threat.API.Controllers;
 
@@ -61,6 +62,22 @@ public sealed class ThreatRelationsController
         var result =
             await _sender.Send(
                 new GetThreatRelationsByIndicatorQuery(
+                    indicatorId),
+                cancellationToken);
+
+        return Ok(result);
+    }
+    [Authorize]
+    [HttpGet]
+    [Route("GetThreatGraph")]
+    [ActionName("دریافت گراف تهدید")]
+    public async Task<IActionResult> GetThreatGraph(
+        [FromQuery] long indicatorId,
+        CancellationToken cancellationToken)
+    {
+        var result =
+            await _sender.Send(
+                new GetThreatGraphQuery(
                     indicatorId),
                 cancellationToken);
 
