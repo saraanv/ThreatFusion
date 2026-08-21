@@ -13,4 +13,5 @@ public interface IThreatDbContext
     DbSet<ThreatFeedSync> ThreatFeedSyncs { get; }
     DbSet<ThreatIndicatorRelation> ThreatIndicatorRelations { get; }
     DbSet<ThreatWatchlist> ThreatWatchlists { get; }
+    DbSet<ThreatAlert> ThreatAlerts { get; }
 }
