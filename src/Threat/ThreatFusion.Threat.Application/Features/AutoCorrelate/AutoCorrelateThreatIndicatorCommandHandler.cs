@@ -186,7 +186,15 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                     CreatedAtUtc =
                         DateTime.UtcNow,
 
-                    IsDeleted = false
+                    IsDeleted = false,
+                    SourceName =
+                        "URL-Enrichment",
+
+                    IsAutomatic =
+                        true,
+
+                    DiscoveredAtUtc =
+                        DateTime.UtcNow,
                 };
 
             await _dbContext.ThreatIndicatorRelations
@@ -335,6 +343,15 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                         "Automatically resolved through DNS enrichment.",
 
                     Confidence = 100,
+
+                    SourceName =
+                        "DNS-Enrichment",
+
+                    IsAutomatic =
+                        true,
+
+                    DiscoveredAtUtc =
+                        DateTime.UtcNow,
 
                     IsActive = true,
 

@@ -109,7 +109,12 @@ public sealed class CreateThreatRelationCommandHandler
                 CreatedAtUtc =
                     DateTime.UtcNow,
 
-                IsDeleted = false
+                IsDeleted = false,
+                SourceName = "Manual",
+                
+                IsAutomatic = false,
+                
+                DiscoveredAtUtc = DateTime.UtcNow,
             };
 
         await _dbContext.ThreatIndicatorRelations

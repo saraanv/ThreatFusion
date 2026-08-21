@@ -6,4 +6,7 @@ public sealed record ThreatGraphEdgeDto(
     long TargetId,
     string RelationType,
     double Confidence,
-    string? Description);
+    string? Description,
+    string SourceName,
+    bool IsAutomatic,
+    DateTime DiscoveredAtUtc);

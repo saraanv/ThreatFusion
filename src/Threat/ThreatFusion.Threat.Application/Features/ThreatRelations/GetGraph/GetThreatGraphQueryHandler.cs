@@ -132,7 +132,10 @@ public sealed class GetThreatGraphQueryHandler
                         x.TargetIndicatorId,
                         x.RelationType.ToString(),
                         x.Confidence,
-                        x.Description))
+                        x.Description,
+                        x.SourceName,
+                        x.IsAutomatic,
+                        x.DiscoveredAtUtc))
                 .ToList();
 
         return new ThreatGraphDto(

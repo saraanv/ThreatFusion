@@ -16,4 +16,10 @@ public sealed class ThreatIndicatorRelation : BaseEntity
     public double Confidence { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    public string SourceName { get; set; } = string.Empty;
+
+    public bool IsAutomatic { get; set; }
+
+    public DateTime DiscoveredAtUtc { get; set; }
 }

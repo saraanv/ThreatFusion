@@ -98,6 +98,15 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
                         x.RelationType
                     })
                     .IsUnique();
+                entity.Property(x => x.SourceName)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.Property(x => x.IsAutomatic)
+                    .IsRequired();
+
+                entity.Property(x => x.DiscoveredAtUtc)
+                    .IsRequired();
             });
         });
     }
