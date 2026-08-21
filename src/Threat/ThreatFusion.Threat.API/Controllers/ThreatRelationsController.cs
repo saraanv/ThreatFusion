@@ -73,12 +73,14 @@ public sealed class ThreatRelationsController
     [ActionName("دریافت گراف تهدید")]
     public async Task<IActionResult> GetThreatGraph(
         [FromQuery] long indicatorId,
-        CancellationToken cancellationToken)
+        [FromQuery] int depth = 1,
+        CancellationToken cancellationToken = default)
     {
         var result =
             await _sender.Send(
                 new GetThreatGraphQuery(
-                    indicatorId),
+                    indicatorId,
+                    depth),
                 cancellationToken);
 
         return Ok(result);
