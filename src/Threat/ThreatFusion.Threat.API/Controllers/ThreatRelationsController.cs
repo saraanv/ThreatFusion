@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.Create;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.GetByIndicator;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.GetGraph;
+using ThreatFusion.Threat.Domain.Enums;
 
 namespace ThreatFusion.Threat.API.Controllers;
 
@@ -74,13 +75,19 @@ public sealed class ThreatRelationsController
     public async Task<IActionResult> GetThreatGraph(
         [FromQuery] long indicatorId,
         [FromQuery] int depth = 1,
+        [FromQuery] ThreatRelationType? relationType = null,
+        [FromQuery] bool? isAutomatic = null,
+        [FromQuery] double? minRiskScore = null,
         CancellationToken cancellationToken = default)
     {
         var result =
             await _sender.Send(
                 new GetThreatGraphQuery(
                     indicatorId,
-                    depth),
+                    depth,
+                    relationType,
+                    isAutomatic,
+                    minRiskScore),
                 cancellationToken);
 
         return Ok(result);

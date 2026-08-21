@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ThreatFusion.Threat.Application.Abstractions;
 using ThreatFusion.Threat.Domain.Entities;
+using ThreatFusion.Threat.Domain.Enums;
 
 namespace ThreatFusion.Threat.Application.Features.ThreatRelations.GetGraph;
 
@@ -54,8 +55,8 @@ public sealed class GetThreatGraphQueryHandler
             var levelIds =
                 currentLevel.ToList();
 
-            var relations =
-                await _dbContext.ThreatIndicatorRelations
+            var relationQuery =
+                _dbContext.ThreatIndicatorRelations
                     .AsNoTracking()
                     .Where(x =>
                         !x.IsDeleted &&
@@ -66,7 +67,26 @@ public sealed class GetThreatGraphQueryHandler
                             ||
                             levelIds.Contains(
                                 x.TargetIndicatorId)
-                        ))
+                        ));
+
+            if (request.RelationType.HasValue)
+            {
+                relationQuery =
+                    relationQuery.Where(x =>
+                        x.RelationType ==
+                        request.RelationType.Value);
+            }
+
+            if (request.IsAutomatic.HasValue)
+            {
+                relationQuery =
+                    relationQuery.Where(x =>
+                        x.IsAutomatic ==
+                        request.IsAutomatic.Value);
+            }
+
+            var relations =
+                await relationQuery
                     .ToListAsync(
                         cancellationToken);
 
@@ -101,14 +121,39 @@ public sealed class GetThreatGraphQueryHandler
         var indicatorIds =
             visitedIndicatorIds.ToList();
 
-        var indicators =
-            await _dbContext.ThreatIndicators
+        var indicatorQuery =
+            _dbContext.ThreatIndicators
                 .AsNoTracking()
                 .Where(x =>
                     indicatorIds.Contains(x.Id) &&
-                    !x.IsDeleted)
+                    !x.IsDeleted);
+
+        if (request.MinRiskScore.HasValue)
+        {
+            indicatorQuery =
+                indicatorQuery.Where(x =>
+                    x.RiskScore >=
+                    request.MinRiskScore.Value);
+        }
+
+        var indicators =
+            await indicatorQuery
                 .ToListAsync(
                     cancellationToken);
+
+        var allowedIndicatorIds =
+            indicators
+                .Select(x => x.Id)
+                .ToHashSet();
+
+        var filteredRelations =
+            allRelations.Values
+                .Where(x =>
+                    allowedIndicatorIds.Contains(
+                        x.SourceIndicatorId) &&
+                    allowedIndicatorIds.Contains(
+                        x.TargetIndicatorId))
+                .ToList();
 
         var nodes =
             indicators
@@ -124,7 +169,7 @@ public sealed class GetThreatGraphQueryHandler
                 .ToList();
 
         var edges =
-            allRelations.Values
+            filteredRelations
                 .Select(x =>
                     new ThreatGraphEdgeDto(
                         x.Id,
@@ -138,8 +183,58 @@ public sealed class GetThreatGraphQueryHandler
                         x.DiscoveredAtUtc))
                 .ToList();
 
+        var highestRiskIndicator =
+            indicators
+                .OrderByDescending(x =>
+                    x.RiskScore)
+                .FirstOrDefault();
+
+        var summary =
+            new ThreatGraphSummaryDto(
+                NodeCount:
+                    nodes.Count,
+
+                EdgeCount:
+                    edges.Count,
+
+                CriticalNodeCount:
+                    indicators.Count(x =>
+                        x.RiskLevel ==
+                        ThreatRiskLevel.Critical),
+
+                HighRiskNodeCount:
+                    indicators.Count(x =>
+                        x.RiskLevel ==
+                        ThreatRiskLevel.High),
+
+                AutomaticRelationCount:
+                    filteredRelations.Count(x =>
+                        x.IsAutomatic),
+
+                ManualRelationCount:
+                    filteredRelations.Count(x =>
+                        !x.IsAutomatic),
+
+                AverageRiskScore:
+                    indicators.Count == 0
+                        ? 0
+                        : Math.Round(
+                            indicators.Average(x =>
+                                x.RiskScore),
+                            2),
+
+                HighestRiskIndicatorId:
+                    highestRiskIndicator?.Id,
+
+                HighestRiskIndicatorValue:
+                    highestRiskIndicator?.Value,
+
+                HighestRiskScore:
+                    highestRiskIndicator?.RiskScore);
+
         return new ThreatGraphDto(
             nodes,
-            edges);
+            edges,
+            summary);
     }
 }
