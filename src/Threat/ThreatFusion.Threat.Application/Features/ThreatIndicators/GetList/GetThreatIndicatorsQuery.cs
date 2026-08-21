@@ -11,6 +11,16 @@ public sealed record GetThreatIndicatorsQuery(
     int? MinConfidence,
     DateTime? FromDateUtc,
     DateTime? ToDateUtc,
+
+    string? SearchTerm,
+    double? MinRiskScore,
+    double? MaxRiskScore,
+    ThreatRiskLevel? RiskLevel,
+    bool? IsActive,
+
+    string? SortBy = "CreatedAtUtc",
+    bool SortDescending = true,
+
     int PageNumber = 1,
     int PageSize = 20)
     : IRequest<PagedResult<ThreatIndicatorListItemDto>>;

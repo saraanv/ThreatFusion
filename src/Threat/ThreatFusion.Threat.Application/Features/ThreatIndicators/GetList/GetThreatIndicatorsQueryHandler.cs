@@ -85,14 +85,62 @@ public sealed class GetThreatIndicatorsQueryHandler
                     request.ToDateUtc.Value);
         }
 
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            var searchTerm =
+                request.SearchTerm.Trim();
+
+            query =
+                query.Where(x =>
+                    x.Value.Contains(searchTerm) ||
+                    (x.Description != null &&
+                     x.Description.Contains(searchTerm)));
+        }
+
+        if (request.MinRiskScore.HasValue)
+        {
+            query =
+                query.Where(x =>
+                    x.RiskScore >=
+                    request.MinRiskScore.Value);
+        }
+
+        if (request.MaxRiskScore.HasValue)
+        {
+            query =
+                query.Where(x =>
+                    x.RiskScore <=
+                    request.MaxRiskScore.Value);
+        }
+
+        if (request.RiskLevel.HasValue)
+        {
+            query =
+                query.Where(x =>
+                    x.RiskLevel ==
+                    request.RiskLevel.Value);
+        }
+
+        if (request.IsActive.HasValue)
+        {
+            query =
+                query.Where(x =>
+                    x.IsActive ==
+                    request.IsActive.Value);
+        }
+
         var totalCount =
             await query.CountAsync(
                 cancellationToken);
 
+        query =
+            ApplySorting(
+                query,
+                request.SortBy,
+                request.SortDescending);
+
         var entities =
             await query
-                .OrderByDescending(x =>
-                    x.CreatedAtUtc)
                 .Skip(
                     (pageNumber - 1) *
                     pageSize)
@@ -134,5 +182,48 @@ public sealed class GetThreatIndicatorsQueryHandler
             pageSize,
             totalCount,
             totalPages);
+    }
+
+    private static IQueryable<Domain.Entities.ThreatIndicator>
+        ApplySorting(
+            IQueryable<Domain.Entities.ThreatIndicator> query,
+            string? sortBy,
+            bool sortDescending)
+    {
+        var normalizedSortBy =
+            sortBy?.Trim().ToLowerInvariant();
+
+        return normalizedSortBy switch
+        {
+            "riskscore" =>
+                sortDescending
+                    ? query.OrderByDescending(x => x.RiskScore)
+                    : query.OrderBy(x => x.RiskScore),
+
+            "severity" =>
+                sortDescending
+                    ? query.OrderByDescending(x => x.Severity)
+                    : query.OrderBy(x => x.Severity),
+
+            "confidence" =>
+                sortDescending
+                    ? query.OrderByDescending(x => x.Confidence)
+                    : query.OrderBy(x => x.Confidence),
+
+            "firstseenutc" =>
+                sortDescending
+                    ? query.OrderByDescending(x => x.FirstSeenUtc)
+                    : query.OrderBy(x => x.FirstSeenUtc),
+
+            "lastseenutc" =>
+                sortDescending
+                    ? query.OrderByDescending(x => x.LastSeenUtc)
+                    : query.OrderBy(x => x.LastSeenUtc),
+
+            _ =>
+                sortDescending
+                    ? query.OrderByDescending(x => x.CreatedAtUtc)
+                    : query.OrderBy(x => x.CreatedAtUtc)
+        };
     }
 }
