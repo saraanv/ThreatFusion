@@ -41,7 +41,9 @@ public sealed class CreateThreatIndicatorCommandHandler
         }
 
         var normalizedValue =
-            request.Value.Trim().ToLowerInvariant();
+            ThreatIndicatorNormalizer.Normalize(
+                request.Type,
+                request.Value);
 
         var risk =
             ThreatRiskCalculator.Calculate(
