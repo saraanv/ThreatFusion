@@ -30,12 +30,23 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
     {
         var indicator =
             await _dbContext.ThreatIndicators
-                .AsNoTracking()
                 .FirstOrDefaultAsync(
                     x =>
                         x.Id == request.IndicatorId &&
                         !x.IsDeleted,
                     cancellationToken);
+
+        if (indicator is null)
+        {
+            return 0;
+        }
+
+        if (indicator.Type == IndicatorType.Url)
+        {
+            return await CorrelateUrlAsync(
+                indicator,
+                cancellationToken);
+        }
 
         if (indicator.Type == IndicatorType.Domain)
         {
@@ -43,20 +54,16 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                 indicator,
                 cancellationToken);
         }
-        
-        if (indicator is null)
-        {
-            return 0;
-        }
 
-        // فعلاً اولین Rule ما فقط برای URL است.
-        if (indicator.Type != IndicatorType.Url)
-        {
-            return 0;
-        }
+        return 0;
+    }
 
+    private async Task<int> CorrelateUrlAsync(
+        ThreatIndicator urlIndicator,
+        CancellationToken cancellationToken)
+    {
         if (!Uri.TryCreate(
-                indicator.Value,
+                urlIndicator.Value,
                 UriKind.Absolute,
                 out var uri))
         {
@@ -75,7 +82,6 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
 
         var domainIndicator =
             await _dbContext.ThreatIndicators
-                .AsNoTracking()
                 .FirstOrDefaultAsync(
                     x =>
                         x.Type == IndicatorType.Domain &&
@@ -83,131 +89,41 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                         !x.IsDeleted,
                     cancellationToken);
 
-        // اگر Domain هنوز در ThreatFusion وجود ندارد،
-        // فعلاً relation نمی‌سازیم.
         if (domainIndicator is null)
         {
-            return 0;
-        }
+            var domainRisk =
+                ThreatRiskCalculator.Calculate(
+                    urlIndicator.Severity,
+                    urlIndicator.Confidence,
+                    null,
+                    "URL-Enrichment");
 
-        // URL را به خودش وصل نکن.
-        if (domainIndicator.Id == indicator.Id)
-        {
-            return 0;
-        }
-
-        var relationExists =
-            await _dbContext.ThreatIndicatorRelations
-                .AnyAsync(
-                    x =>
-                        x.SourceIndicatorId == indicator.Id &&
-                        x.TargetIndicatorId == domainIndicator.Id &&
-                        x.RelationType ==
-                            ThreatRelationType.AssociatedWith &&
-                        !x.IsDeleted,
-                    cancellationToken);
-
-        if (relationExists)
-        {
-            return 0;
-        }
-
-        var relation =
-            new ThreatIndicatorRelation
-            {
-                SourceIndicatorId =
-                    indicator.Id,
-
-                TargetIndicatorId =
-                    domainIndicator.Id,
-
-                RelationType =
-                    ThreatRelationType.AssociatedWith,
-
-                Description =
-                    "Automatically correlated from URL host.",
-
-                Confidence = 100,
-
-                IsActive = true,
-
-                CreatedAtUtc =
-                    DateTime.UtcNow,
-
-                IsDeleted = false
-            };
-
-        await _dbContext.ThreatIndicatorRelations
-            .AddAsync(
-                relation,
-                cancellationToken);
-
-        await _dbContext.SaveChangesAsync(
-            cancellationToken);
-
-        return 1;
-    }
-    
-    private async Task<int> CorrelateDomainWithIpAsync(
-    ThreatIndicator indicator,
-    CancellationToken cancellationToken)
-{
-    var resolvedIpAddresses =
-        await _dnsEnrichmentService.ResolveIpAddressesAsync(
-            indicator.Value,
-            cancellationToken);
-
-    if (resolvedIpAddresses.Count == 0)
-    {
-        return 0;
-    }
-
-    var createdRelations = 0;
-
-    foreach (var ipAddress in resolvedIpAddresses)
-    {
-        var normalizedIp =
-            ThreatIndicatorNormalizer.Normalize(
-                IndicatorType.IpAddress,
-                ipAddress);
-
-        var ipIndicator =
-            await _dbContext.ThreatIndicators
-                .FirstOrDefaultAsync(
-                    x =>
-                        x.Type == IndicatorType.IpAddress &&
-                        x.Value == normalizedIp &&
-                        !x.IsDeleted,
-                    cancellationToken);
-
-        if (ipIndicator is null)
-        {
-            ipIndicator =
+            domainIndicator =
                 new ThreatIndicator
                 {
                     Type =
-                        IndicatorType.IpAddress,
+                        IndicatorType.Domain,
 
                     Value =
-                        normalizedIp,
+                        normalizedDomain,
 
                     Severity =
-                        indicator.Severity,
+                        urlIndicator.Severity,
 
                     Confidence =
-                        indicator.Confidence,
+                        urlIndicator.Confidence,
 
                     RiskScore =
-                        indicator.RiskScore,
+                        domainRisk.Score,
 
                     RiskLevel =
-                        indicator.RiskLevel,
+                        domainRisk.Level,
 
                     SourceName =
-                        "DNS-Enrichment",
+                        "URL-Enrichment",
 
                     Description =
-                        $"Resolved automatically from domain {indicator.Value}.",
+                        $"Extracted automatically from URL {urlIndicator.Value}.",
 
                     FirstSeenUtc =
                         DateTime.UtcNow,
@@ -219,72 +135,229 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                         DateTime.UtcNow,
 
                     IsActive = true,
-
                     IsDeleted = false
                 };
 
-            await _dbContext.ThreatIndicators.AddAsync(
-                ipIndicator,
-                cancellationToken);
+            await _dbContext.ThreatIndicators
+                .AddAsync(
+                    domainIndicator,
+                    cancellationToken);
 
             await _dbContext.SaveChangesAsync(
                 cancellationToken);
         }
 
-        var relationExists =
+        var createdRelations = 0;
+
+        var urlDomainRelationExists =
             await _dbContext.ThreatIndicatorRelations
                 .AnyAsync(
                     x =>
-                        x.SourceIndicatorId == indicator.Id &&
-                        x.TargetIndicatorId == ipIndicator.Id &&
+                        x.SourceIndicatorId ==
+                            urlIndicator.Id &&
+                        x.TargetIndicatorId ==
+                            domainIndicator.Id &&
                         x.RelationType ==
-                            ThreatRelationType.ResolvesTo &&
+                            ThreatRelationType.AssociatedWith &&
                         !x.IsDeleted,
                     cancellationToken);
 
-        if (relationExists)
+        if (!urlDomainRelationExists)
         {
-            continue;
+            var relation =
+                new ThreatIndicatorRelation
+                {
+                    SourceIndicatorId =
+                        urlIndicator.Id,
+
+                    TargetIndicatorId =
+                        domainIndicator.Id,
+
+                    RelationType =
+                        ThreatRelationType.AssociatedWith,
+
+                    Description =
+                        "Automatically correlated from URL host.",
+
+                    Confidence = 100,
+
+                    IsActive = true,
+
+                    CreatedAtUtc =
+                        DateTime.UtcNow,
+
+                    IsDeleted = false
+                };
+
+            await _dbContext.ThreatIndicatorRelations
+                .AddAsync(
+                    relation,
+                    cancellationToken);
+
+            await _dbContext.SaveChangesAsync(
+                cancellationToken);
+
+            createdRelations++;
         }
 
-        var relation =
-            new ThreatIndicatorRelation
-            {
-                SourceIndicatorId =
-                    indicator.Id,
+        createdRelations +=
+            await CorrelateDomainWithIpAsync(
+                domainIndicator,
+                cancellationToken);
 
-                TargetIndicatorId =
-                    ipIndicator.Id,
-
-                RelationType =
-                    ThreatRelationType.ResolvesTo,
-
-                Description =
-                    "Automatically resolved through DNS enrichment.",
-
-                Confidence = 100,
-
-                IsActive = true,
-
-                CreatedAtUtc =
-                    DateTime.UtcNow,
-
-                IsDeleted = false
-            };
-
-        await _dbContext.ThreatIndicatorRelations.AddAsync(
-            relation,
-            cancellationToken);
-
-        createdRelations++;
+        return createdRelations;
     }
 
-    if (createdRelations > 0)
+    private async Task<int> CorrelateDomainWithIpAsync(
+        ThreatIndicator domainIndicator,
+        CancellationToken cancellationToken)
     {
-        await _dbContext.SaveChangesAsync(
-            cancellationToken);
-    }
+        var resolvedIpAddresses =
+            await _dnsEnrichmentService
+                .ResolveIpAddressesAsync(
+                    domainIndicator.Value,
+                    cancellationToken);
 
-    return createdRelations;
-}
+        if (resolvedIpAddresses.Count == 0)
+        {
+            return 0;
+        }
+
+        var createdRelations = 0;
+
+        foreach (var ipAddress in resolvedIpAddresses)
+        {
+            var normalizedIp =
+                ThreatIndicatorNormalizer.Normalize(
+                    IndicatorType.IpAddress,
+                    ipAddress);
+
+            var ipIndicator =
+                await _dbContext.ThreatIndicators
+                    .FirstOrDefaultAsync(
+                        x =>
+                            x.Type ==
+                                IndicatorType.IpAddress &&
+                            x.Value ==
+                                normalizedIp &&
+                            !x.IsDeleted,
+                        cancellationToken);
+
+            if (ipIndicator is null)
+            {
+                var ipRisk =
+                    ThreatRiskCalculator.Calculate(
+                        domainIndicator.Severity,
+                        domainIndicator.Confidence,
+                        null,
+                        "DNS-Enrichment");
+
+                ipIndicator =
+                    new ThreatIndicator
+                    {
+                        Type =
+                            IndicatorType.IpAddress,
+
+                        Value =
+                            normalizedIp,
+
+                        Severity =
+                            domainIndicator.Severity,
+
+                        Confidence =
+                            domainIndicator.Confidence,
+
+                        RiskScore =
+                            ipRisk.Score,
+
+                        RiskLevel =
+                            ipRisk.Level,
+
+                        SourceName =
+                            "DNS-Enrichment",
+
+                        Description =
+                            $"Resolved automatically from domain {domainIndicator.Value}.",
+
+                        FirstSeenUtc =
+                            DateTime.UtcNow,
+
+                        LastSeenUtc =
+                            DateTime.UtcNow,
+
+                        CreatedAtUtc =
+                            DateTime.UtcNow,
+
+                        IsActive = true,
+                        IsDeleted = false
+                    };
+
+                await _dbContext.ThreatIndicators
+                    .AddAsync(
+                        ipIndicator,
+                        cancellationToken);
+
+                await _dbContext.SaveChangesAsync(
+                    cancellationToken);
+            }
+
+            var relationExists =
+                await _dbContext.ThreatIndicatorRelations
+                    .AnyAsync(
+                        x =>
+                            x.SourceIndicatorId ==
+                                domainIndicator.Id &&
+                            x.TargetIndicatorId ==
+                                ipIndicator.Id &&
+                            x.RelationType ==
+                                ThreatRelationType.ResolvesTo &&
+                            !x.IsDeleted,
+                        cancellationToken);
+
+            if (relationExists)
+            {
+                continue;
+            }
+
+            var relation =
+                new ThreatIndicatorRelation
+                {
+                    SourceIndicatorId =
+                        domainIndicator.Id,
+
+                    TargetIndicatorId =
+                        ipIndicator.Id,
+
+                    RelationType =
+                        ThreatRelationType.ResolvesTo,
+
+                    Description =
+                        "Automatically resolved through DNS enrichment.",
+
+                    Confidence = 100,
+
+                    IsActive = true,
+
+                    CreatedAtUtc =
+                        DateTime.UtcNow,
+
+                    IsDeleted = false
+                };
+
+            await _dbContext.ThreatIndicatorRelations
+                .AddAsync(
+                    relation,
+                    cancellationToken);
+
+            createdRelations++;
+        }
+
+        if (createdRelations > 0)
+        {
+            await _dbContext.SaveChangesAsync(
+                cancellationToken);
+        }
+
+        return createdRelations;
+    }
 }
