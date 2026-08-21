@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ThreatFusion.FeedCollectorService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+478711d6e34967703bad7f88bd24f5df11cae51d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+897add21d479bb307658af0deaa4004f7b312884")]
 [assembly: System.Reflection.AssemblyProductAttribute("ThreatFusion.FeedCollectorService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ThreatFusion.FeedCollectorService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -108,9 +108,28 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
                 entity.Property(x => x.DiscoveredAtUtc)
                     .IsRequired();
             });
+        });builder.Entity<ThreatWatchlist>(entity =>
+        {
+            entity.ToTable("ThreatWatchlists");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Note)
+                .HasMaxLength(1000);
+
+            entity.Property(x => x.IsActive)
+                .IsRequired();
+
+            entity.HasIndex(x => new
+                {
+                    x.UserId,
+                    x.ThreatIndicatorId
+                })
+                .IsUnique();
         });
     }
     public DbSet<ThreatIndicatorRelation> ThreatIndicatorRelations =>
         Set<ThreatIndicatorRelation>();
-    
+    public DbSet<ThreatWatchlist> ThreatWatchlists =>
+        Set<ThreatWatchlist>();
 }

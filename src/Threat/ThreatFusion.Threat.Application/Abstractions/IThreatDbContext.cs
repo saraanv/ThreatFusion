@@ -12,4 +12,5 @@ public interface IThreatDbContext
         CancellationToken cancellationToken = default);
     DbSet<ThreatFeedSync> ThreatFeedSyncs { get; }
     DbSet<ThreatIndicatorRelation> ThreatIndicatorRelations { get; }
+    DbSet<ThreatWatchlist> ThreatWatchlists { get; }
 }

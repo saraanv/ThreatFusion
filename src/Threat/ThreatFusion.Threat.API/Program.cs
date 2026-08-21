@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using ThreatFusion.Threat.API.Services;
 using ThreatFusion.Threat.Application;
 using ThreatFusion.Threat.Infrastructure;
 
@@ -88,6 +89,9 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<CurrentUserService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -109,5 +113,6 @@ app.MapGet("/health", () => Results.Ok(new
     Service = "ThreatFusion.Threat.API",
     TimestampUtc = DateTime.UtcNow
 }));
+
 
 app.Run();
