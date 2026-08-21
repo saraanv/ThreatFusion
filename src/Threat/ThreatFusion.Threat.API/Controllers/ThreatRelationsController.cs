@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.Create;
+using ThreatFusion.Threat.Application.Features.ThreatRelations.GetByIndicator;
 
 namespace ThreatFusion.Threat.API.Controllers;
 
@@ -47,5 +48,22 @@ public sealed class ThreatRelationsController
                 Message =
                     "Threat relation created successfully."
             });
+    }
+    
+    [Authorize]
+    [HttpGet]
+    [Route("GetRelationsByIndicator")]
+    [ActionName("دریافت ارتباطات شاخص تهدید")]
+    public async Task<IActionResult> GetRelationsByIndicator(
+        [FromQuery] long indicatorId,
+        CancellationToken cancellationToken)
+    {
+        var result =
+            await _sender.Send(
+                new GetThreatRelationsByIndicatorQuery(
+                    indicatorId),
+                cancellationToken);
+
+        return Ok(result);
     }
 }
