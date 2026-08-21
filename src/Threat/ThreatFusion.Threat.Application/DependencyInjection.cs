@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using ThreatFusion.Threat.Application.Services;
 
 namespace ThreatFusion.Threat.Application;
 
@@ -19,6 +20,8 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(
             assembly);
+
+        services.AddScoped<DnsEnrichmentService>();
 
         return services;
     }
