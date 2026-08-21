@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ThreatFusion.Threat.Application.Abstractions;
 using ThreatFusion.Threat.Application.Services;
 using ThreatFusion.Threat.Domain.Entities;
+using ThreatFusion.Threat.Application.Features.ThreatRelations.AutoCorrelate;
 
 namespace ThreatFusion.Threat.Application.Features.ThreatIndicators.Create;
 
@@ -14,13 +15,15 @@ public sealed class CreateThreatIndicatorCommandHandler
 {
     private readonly IThreatDbContext _dbContext;
     private readonly IValidator<CreateThreatIndicatorCommand> _validator;
-
+    private readonly ISender _sender;
     public CreateThreatIndicatorCommandHandler(
         IThreatDbContext dbContext,
-        IValidator<CreateThreatIndicatorCommand> validator)
+        IValidator<CreateThreatIndicatorCommand> validator,
+        ISender sender)
     {
         _dbContext = dbContext;
         _validator = validator;
+        _sender = sender;
     }
 
     public async Task<CreateThreatIndicatorResult> Handle(
@@ -141,6 +144,11 @@ public sealed class CreateThreatIndicatorCommandHandler
 
             if (!changed)
             {
+                await _sender.Send(
+                    new AutoCorrelateThreatIndicatorCommand(
+                        existingIndicator.Id),
+                    cancellationToken);
+
                 return CreateThreatIndicatorResult.Unchanged(
                     existingIndicator.Id);
             }
@@ -148,6 +156,11 @@ public sealed class CreateThreatIndicatorCommandHandler
             await _dbContext.SaveChangesAsync(
                 cancellationToken);
 
+            await _sender.Send(
+                new AutoCorrelateThreatIndicatorCommand(
+                    existingIndicator.Id),
+                cancellationToken);
+            
             return CreateThreatIndicatorResult.Updated(
                 existingIndicator.Id);
         }
@@ -186,6 +199,11 @@ public sealed class CreateThreatIndicatorCommandHandler
             cancellationToken);
 
         await _dbContext.SaveChangesAsync(
+            cancellationToken);
+
+        await _sender.Send(
+            new AutoCorrelateThreatIndicatorCommand(
+                indicator.Id),
             cancellationToken);
 
         return CreateThreatIndicatorResult.Created(
