@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using ThreatFusion.Threat.API.Services;
 using ThreatFusion.Threat.Application;
 using ThreatFusion.Threat.Infrastructure;
-
+using ThreatFusion.Threat.API.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
@@ -93,13 +93,13 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<CurrentUserService>();
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

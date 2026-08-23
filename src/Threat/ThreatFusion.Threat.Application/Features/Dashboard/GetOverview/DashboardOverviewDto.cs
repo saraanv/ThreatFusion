@@ -8,5 +8,17 @@ public sealed record DashboardOverviewDto(
     int UnreadAlerts,
     int AutomaticRelations,
     int ManualRelations,
-    IReadOnlyCollection<DashboardRiskyIndicatorDto> TopRiskyIndicators,
-    IReadOnlyCollection<DashboardRecentAlertDto> RecentAlerts);
+
+    IReadOnlyCollection<DashboardRiskyIndicatorDto>
+        TopRiskyIndicators,
+
+    IReadOnlyCollection<DashboardRecentAlertDto>
+        RecentAlerts,
+
+    IReadOnlyCollection<DashboardDistributionItemDto>
+        SeverityDistribution,
+
+    IReadOnlyCollection<DashboardDistributionItemDto>
+        IndicatorTypeDistribution,
+
+    DashboardFeedSyncDto? LastFeedSync);

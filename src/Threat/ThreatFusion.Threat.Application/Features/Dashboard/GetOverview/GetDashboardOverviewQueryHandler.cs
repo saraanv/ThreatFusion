@@ -80,7 +80,7 @@ public sealed class GetDashboardOverviewQueryHandler
 
         /*
          * ==========================================
-         * USER ALERTS
+         * UNREAD ALERTS
          * ==========================================
          */
 
@@ -173,10 +173,6 @@ public sealed class GetDashboardOverviewQueryHandler
          * ==========================================
          * RECENT ALERTS
          * ==========================================
-         *
-         * عمداً Join مستقیم نمی‌زنیم.
-         * اول فقط 5 Alert آخر را می‌گیریم،
-         * بعد Indicatorهای مرتبط را جدا می‌خوانیم.
          */
 
         var recentAlertsRaw =
@@ -239,6 +235,106 @@ public sealed class GetDashboardOverviewQueryHandler
 
         /*
          * ==========================================
+         * SEVERITY DISTRIBUTION
+         * ==========================================
+         */
+
+        var severityRows =
+            await _dbContext.ThreatIndicators
+                .AsNoTracking()
+                .Where(x =>
+                    !x.IsDeleted &&
+                    x.IsActive)
+                .GroupBy(x =>
+                    x.Severity)
+                .Select(g => new
+                {
+                    Severity =
+                        g.Key,
+
+                    Count =
+                        g.Count()
+                })
+                .ToListAsync(
+                    cancellationToken);
+
+        var severityDistribution =
+            severityRows
+                .Select(x =>
+                    new DashboardDistributionItemDto(
+                        x.Severity.ToString(),
+                        x.Count))
+                .OrderBy(x =>
+                    x.Name)
+                .ToList();
+
+        /*
+         * ==========================================
+         * INDICATOR TYPE DISTRIBUTION
+         * ==========================================
+         */
+
+        var typeRows =
+            await _dbContext.ThreatIndicators
+                .AsNoTracking()
+                .Where(x =>
+                    !x.IsDeleted &&
+                    x.IsActive)
+                .GroupBy(x =>
+                    x.Type)
+                .Select(g => new
+                {
+                    Type =
+                        g.Key,
+
+                    Count =
+                        g.Count()
+                })
+                .ToListAsync(
+                    cancellationToken);
+
+        var indicatorTypeDistribution =
+            typeRows
+                .Select(x =>
+                    new DashboardDistributionItemDto(
+                        x.Type.ToString(),
+                        x.Count))
+                .OrderByDescending(x =>
+                    x.Count)
+                .ToList();
+
+        /*
+         * ==========================================
+         * LAST FEED SYNC
+         * ==========================================
+         */
+
+        var lastFeedSyncEntity =
+            await _dbContext.ThreatFeedSyncs
+                .AsNoTracking()
+                .OrderByDescending(x =>
+                    x.StartedAtUtc)
+                .FirstOrDefaultAsync(
+                    cancellationToken);
+
+        DashboardFeedSyncDto? lastFeedSync =
+            null;
+
+        if (lastFeedSyncEntity is not null)
+        {
+            lastFeedSync =
+                new DashboardFeedSyncDto(
+                    lastFeedSyncEntity.FeedName,
+                    lastFeedSyncEntity.StartedAtUtc,
+                    lastFeedSyncEntity.CompletedAtUtc,
+                    lastFeedSyncEntity.TotalFetched,
+                    lastFeedSyncEntity.FailedCount,
+                    lastFeedSyncEntity.IsSuccessful,
+                    lastFeedSyncEntity.ErrorMessage);
+        }
+
+        /*
+         * ==========================================
          * RESULT
          * ==========================================
          */
@@ -252,6 +348,9 @@ public sealed class GetDashboardOverviewQueryHandler
             automaticRelations,
             manualRelations,
             topRiskyIndicators,
-            recentAlerts);
+            recentAlerts,
+            severityDistribution,
+            indicatorTypeDistribution,
+            lastFeedSync);
     }
 }
