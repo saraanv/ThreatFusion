@@ -217,4 +217,79 @@ public sealed class ThreatAlertService
                         threshold,
                 cancellationToken);
     }
+    public async Task CreateIndicatorUpdatedAlertsAsync(
+        long indicatorId,
+        string indicatorValue,
+        ThreatSeverity severity,
+        string changeSummary,
+        CancellationToken cancellationToken)
+    {
+        var watcherUserIds =
+            await GetWatcherUserIdsAsync(
+                indicatorId,
+                cancellationToken);
+    
+        if (watcherUserIds.Count == 0)
+        {
+            return;
+        }
+    
+        foreach (var userId in watcherUserIds)
+        {
+            var duplicateExists =
+                await HasRecentDuplicateAsync(
+                    userId,
+                    indicatorId,
+                    ThreatAlertType.IndicatorUpdated,
+                    TimeSpan.FromMinutes(10),
+                    cancellationToken);
+    
+            if (duplicateExists)
+            {
+                continue;
+            }
+    
+            var alert =
+                new ThreatAlert
+                {
+                    UserId = userId,
+    
+                    ThreatIndicatorId =
+                        indicatorId,
+    
+                    AlertType =
+                        ThreatAlertType.IndicatorUpdated,
+    
+                    Title =
+                        "Threat indicator updated",
+    
+                    Message =
+                        $"Indicator '{indicatorValue}' was updated. " +
+                        changeSummary,
+    
+                    Severity =
+                        severity,
+    
+                    IsRead =
+                        false,
+    
+                    ReadAtUtc =
+                        null,
+    
+                    CreatedAtUtc =
+                        DateTime.UtcNow,
+    
+                    IsDeleted =
+                        false
+                };
+    
+            await _dbContext.ThreatAlerts
+                .AddAsync(
+                    alert,
+                    cancellationToken);
+        }
+    
+        await _dbContext.SaveChangesAsync(
+            cancellationToken);
+    }
 }
