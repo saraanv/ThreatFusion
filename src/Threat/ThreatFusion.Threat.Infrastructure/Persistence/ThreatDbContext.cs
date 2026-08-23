@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using ThreatFusion.Threat.Domain.Entities;
 using ThreatFusion.Threat.Application.Abstractions;
+using ThreatFusion.Threat.Domain.Entities;
 
 namespace ThreatFusion.Threat.Infrastructure.Persistence;
 
-public sealed class ThreatDbContext : DbContext, IThreatDbContext
+public sealed class ThreatDbContext
+    : DbContext, IThreatDbContext
 {
     public ThreatDbContext(
         DbContextOptions<ThreatDbContext> options)
@@ -14,13 +15,30 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
 
     public DbSet<ThreatIndicator> ThreatIndicators =>
         Set<ThreatIndicator>();
+
     public DbSet<ThreatFeedSync> ThreatFeedSyncs =>
         Set<ThreatFeedSync>();
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    public DbSet<ThreatIndicatorRelation>
+        ThreatIndicatorRelations =>
+        Set<ThreatIndicatorRelation>();
+
+    public DbSet<ThreatWatchlist> ThreatWatchlists =>
+        Set<ThreatWatchlist>();
+
+    public DbSet<ThreatAlert> ThreatAlerts =>
+        Set<ThreatAlert>();
+
+    protected override void OnModelCreating(
+        ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
+        /*
+         * ==========================================
+         * THREAT INDICATORS
+         * ==========================================
+         */
         builder.Entity<ThreatIndicator>(entity =>
         {
             entity.ToTable("ThreatIndicators");
@@ -47,24 +65,6 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
             entity.Property(x => x.Confidence)
                 .IsRequired();
 
-            entity.HasIndex(x => new
-            {
-                x.Type,
-                x.Value
-            })
-            .IsUnique();
-
-            entity.HasQueryFilter(x => !x.IsDeleted);builder.Entity<ThreatFeedSync>(entity =>
-            {
-                entity.ToTable("ThreatFeedSyncs");
-
-                entity.Property(x => x.FeedName)
-                    .HasMaxLength(200)
-                    .IsRequired();
-
-                entity.Property(x => x.ErrorMessage)
-                    .HasMaxLength(2000);
-            });
             entity.Property(x => x.CvssVersion)
                 .HasMaxLength(20);
 
@@ -76,9 +76,64 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
 
             entity.Property(x => x.ReferenceUrl)
                 .HasMaxLength(2048);
-            builder.Entity<ThreatIndicatorRelation>(entity =>
+
+            entity.HasIndex(x => new
             {
-                entity.ToTable("ThreatIndicatorRelations");
+                x.Type,
+                x.Value
+            })
+            .IsUnique();
+
+            /*
+             * Dashboard performance
+             */
+            entity.HasIndex(x => new
+            {
+                x.IsDeleted,
+                x.IsActive,
+                x.RiskScore
+            });
+
+            entity.HasIndex(x => new
+            {
+                x.IsDeleted,
+                x.IsActive,
+                x.RiskLevel
+            });
+
+            entity.HasQueryFilter(x =>
+                !x.IsDeleted);
+        });
+
+        /*
+         * ==========================================
+         * FEED SYNCS
+         * ==========================================
+         */
+        builder.Entity<ThreatFeedSync>(entity =>
+        {
+            entity.ToTable("ThreatFeedSyncs");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.FeedName)
+                .HasMaxLength(200)
+                .IsRequired();
+
+            entity.Property(x => x.ErrorMessage)
+                .HasMaxLength(2000);
+        });
+
+        /*
+         * ==========================================
+         * THREAT RELATIONS
+         * ==========================================
+         */
+        builder.Entity<ThreatIndicatorRelation>(
+            entity =>
+            {
+                entity.ToTable(
+                    "ThreatIndicatorRelations");
 
                 entity.HasKey(x => x.Id);
 
@@ -91,13 +146,6 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
                 entity.Property(x => x.IsActive)
                     .IsRequired();
 
-                entity.HasIndex(x => new
-                    {
-                        x.SourceIndicatorId,
-                        x.TargetIndicatorId,
-                        x.RelationType
-                    })
-                    .IsUnique();
                 entity.Property(x => x.SourceName)
                     .HasMaxLength(200)
                     .IsRequired();
@@ -105,10 +153,32 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
                 entity.Property(x => x.IsAutomatic)
                     .IsRequired();
 
-                entity.Property(x => x.DiscoveredAtUtc)
+                entity.Property(x =>
+                        x.DiscoveredAtUtc)
                     .IsRequired();
+
+                entity.HasIndex(x => new
+                {
+                    x.SourceIndicatorId,
+                    x.TargetIndicatorId,
+                    x.RelationType
+                })
+                .IsUnique();
+
+                entity.HasIndex(x => new
+                {
+                    x.IsDeleted,
+                    x.IsActive,
+                    x.IsAutomatic
+                });
             });
-        });builder.Entity<ThreatWatchlist>(entity =>
+
+        /*
+         * ==========================================
+         * WATCHLIST
+         * ==========================================
+         */
+        builder.Entity<ThreatWatchlist>(entity =>
         {
             entity.ToTable("ThreatWatchlists");
 
@@ -121,12 +191,25 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
                 .IsRequired();
 
             entity.HasIndex(x => new
-                {
-                    x.UserId,
-                    x.ThreatIndicatorId
-                })
-                .IsUnique();
+            {
+                x.UserId,
+                x.ThreatIndicatorId
+            })
+            .IsUnique();
+
+            entity.HasIndex(x => new
+            {
+                x.UserId,
+                x.IsActive,
+                x.IsDeleted
+            });
         });
+
+        /*
+         * ==========================================
+         * ALERTS
+         * ==========================================
+         */
         builder.Entity<ThreatAlert>(entity =>
         {
             entity.ToTable("ThreatAlerts");
@@ -153,18 +236,18 @@ public sealed class ThreatDbContext : DbContext, IThreatDbContext
             entity.HasIndex(x => new
             {
                 x.UserId,
-                x.IsRead
+                x.IsRead,
+                x.IsDeleted
+            });
+
+            entity.HasIndex(x => new
+            {
+                x.UserId,
+                x.CreatedAtUtc
             });
 
             entity.HasIndex(x =>
                 x.ThreatIndicatorId);
         });
-        
     }
-    public DbSet<ThreatIndicatorRelation> ThreatIndicatorRelations =>
-        Set<ThreatIndicatorRelation>();
-    public DbSet<ThreatWatchlist> ThreatWatchlists =>
-        Set<ThreatWatchlist>();
-    public DbSet<ThreatAlert> ThreatAlerts =>
-        Set<ThreatAlert>();
 }
