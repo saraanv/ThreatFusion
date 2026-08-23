@@ -1,0 +1,161 @@
+using Microsoft.EntityFrameworkCore;
+using ThreatFusion.Threat.Application.Abstractions;
+using ThreatFusion.Threat.Domain.Entities;
+using ThreatFusion.Threat.Domain.Enums;
+
+namespace ThreatFusion.Threat.Application.Services;
+
+public sealed class ThreatAlertService
+{
+    private readonly IThreatDbContext _dbContext;
+
+    public ThreatAlertService(
+        IThreatDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task CreateNewRelationAlertsAsync(
+        long indicatorId,
+        string indicatorValue,
+        ThreatSeverity severity,
+        string relatedIndicatorValue,
+        ThreatRelationType relationType,
+        CancellationToken cancellationToken)
+    {
+        var watcherUserIds =
+            await _dbContext.ThreatWatchlists
+                .AsNoTracking()
+                .Where(x =>
+                    x.ThreatIndicatorId ==
+                        indicatorId &&
+                    x.IsActive &&
+                    !x.IsDeleted)
+                .Select(x =>
+                    x.UserId)
+                .Distinct()
+                .ToListAsync(
+                    cancellationToken);
+
+        if (watcherUserIds.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var userId in watcherUserIds)
+        {
+            var alert =
+                new ThreatAlert
+                {
+                    UserId =
+                        userId,
+
+                    ThreatIndicatorId =
+                        indicatorId,
+
+                    AlertType =
+                        ThreatAlertType.NewRelation,
+
+                    Title =
+                        "New threat relation discovered",
+
+                    Message =
+                        $"A new {relationType} relation " +
+                        $"was discovered for " +
+                        $"'{indicatorValue}' with " +
+                        $"'{relatedIndicatorValue}'.",
+
+                    Severity =
+                        severity,
+
+                    IsRead =
+                        false,
+
+                    ReadAtUtc =
+                        null,
+
+                    CreatedAtUtc =
+                        DateTime.UtcNow,
+
+                    IsDeleted =
+                        false
+                };
+
+            await _dbContext.ThreatAlerts
+                .AddAsync(
+                    alert,
+                    cancellationToken);
+        }
+
+        await _dbContext.SaveChangesAsync(
+            cancellationToken);
+    }
+    public async Task CreateRiskIncreasedAlertsAsync(
+        long indicatorId,
+        string indicatorValue,
+        double oldRiskScore,
+        double newRiskScore,
+        ThreatSeverity severity,
+        CancellationToken cancellationToken)
+    {
+        if (newRiskScore <= oldRiskScore)
+        {
+            return;
+        }
+    
+        var watcherUserIds =
+            await _dbContext.ThreatWatchlists
+                .AsNoTracking()
+                .Where(x =>
+                    x.ThreatIndicatorId == indicatorId &&
+                    x.IsActive &&
+                    !x.IsDeleted)
+                .Select(x => x.UserId)
+                .Distinct()
+                .ToListAsync(cancellationToken);
+    
+        if (watcherUserIds.Count == 0)
+        {
+            return;
+        }
+    
+        foreach (var userId in watcherUserIds)
+        {
+            var alert =
+                new ThreatAlert
+                {
+                    UserId = userId,
+    
+                    ThreatIndicatorId = indicatorId,
+    
+                    AlertType =
+                        ThreatAlertType.RiskIncreased,
+    
+                    Title =
+                        "Threat risk increased",
+    
+                    Message =
+                        $"Risk score for '{indicatorValue}' " +
+                        $"increased from {oldRiskScore} to {newRiskScore}.",
+    
+                    Severity = severity,
+    
+                    IsRead = false,
+    
+                    ReadAtUtc = null,
+    
+                    CreatedAtUtc = DateTime.UtcNow,
+    
+                    IsDeleted = false
+                };
+    
+            await _dbContext.ThreatAlerts
+                .AddAsync(
+                    alert,
+                    cancellationToken);
+        }
+    
+        await _dbContext.SaveChangesAsync(
+            cancellationToken);
+    }
+}

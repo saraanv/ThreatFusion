@@ -23,6 +23,8 @@ public static class DependencyInjection
 
         services.AddScoped<DnsEnrichmentService>();
 
+        services.AddScoped<ThreatAlertService>();
+
         return services;
     }
 }

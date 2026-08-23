@@ -15,13 +15,16 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
 {
     private readonly IThreatDbContext _dbContext;
     private readonly DnsEnrichmentService _dnsEnrichmentService;
+    private readonly ThreatAlertService _threatAlertService;
 
     public AutoCorrelateThreatIndicatorCommandHandler(
         IThreatDbContext dbContext,
-        DnsEnrichmentService dnsEnrichmentService)
+        DnsEnrichmentService dnsEnrichmentService,
+        ThreatAlertService threatAlertService)
     {
         _dbContext = dbContext;
         _dnsEnrichmentService = dnsEnrichmentService;
+        _threatAlertService = threatAlertService;
     }
 
     public async Task<int> Handle(
@@ -75,7 +78,8 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                 IndicatorType.Domain,
                 uri.Host);
 
-        if (string.IsNullOrWhiteSpace(normalizedDomain))
+        if (string.IsNullOrWhiteSpace(
+                normalizedDomain))
         {
             return 0;
         }
@@ -84,8 +88,10 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
             await _dbContext.ThreatIndicators
                 .FirstOrDefaultAsync(
                     x =>
-                        x.Type == IndicatorType.Domain &&
-                        x.Value == normalizedDomain &&
+                        x.Type ==
+                            IndicatorType.Domain &&
+                        x.Value ==
+                            normalizedDomain &&
                         !x.IsDeleted,
                     cancellationToken);
 
@@ -150,7 +156,8 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
         var createdRelations = 0;
 
         var urlDomainRelationExists =
-            await _dbContext.ThreatIndicatorRelations
+            await _dbContext
+                .ThreatIndicatorRelations
                 .AnyAsync(
                     x =>
                         x.SourceIndicatorId ==
@@ -158,7 +165,8 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                         x.TargetIndicatorId ==
                             domainIndicator.Id &&
                         x.RelationType ==
-                            ThreatRelationType.AssociatedWith &&
+                            ThreatRelationType
+                                .AssociatedWith &&
                         !x.IsDeleted,
                     cancellationToken);
 
@@ -174,19 +182,14 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                         domainIndicator.Id,
 
                     RelationType =
-                        ThreatRelationType.AssociatedWith,
+                        ThreatRelationType
+                            .AssociatedWith,
 
                     Description =
                         "Automatically correlated from URL host.",
 
                     Confidence = 100,
 
-                    IsActive = true,
-
-                    CreatedAtUtc =
-                        DateTime.UtcNow,
-
-                    IsDeleted = false,
                     SourceName =
                         "URL-Enrichment",
 
@@ -195,9 +198,17 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
 
                     DiscoveredAtUtc =
                         DateTime.UtcNow,
+
+                    IsActive = true,
+
+                    CreatedAtUtc =
+                        DateTime.UtcNow,
+
+                    IsDeleted = false
                 };
 
-            await _dbContext.ThreatIndicatorRelations
+            await _dbContext
+                .ThreatIndicatorRelations
                 .AddAsync(
                     relation,
                     cancellationToken);
@@ -206,8 +217,40 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                 cancellationToken);
 
             createdRelations++;
+
+            /*
+             * Alert برای هر دو سمت relation.
+             *
+             * اگر URL watch شده باشد:
+             * URL → Domain alert
+             */
+            await _threatAlertService
+                .CreateNewRelationAlertsAsync(
+                    urlIndicator.Id,
+                    urlIndicator.Value,
+                    urlIndicator.Severity,
+                    domainIndicator.Value,
+                    ThreatRelationType.AssociatedWith,
+                    cancellationToken);
+
+            /*
+             * اگر Domain watch شده باشد:
+             * Domain ← URL alert
+             */
+            await _threatAlertService
+                .CreateNewRelationAlertsAsync(
+                    domainIndicator.Id,
+                    domainIndicator.Value,
+                    domainIndicator.Severity,
+                    urlIndicator.Value,
+                    ThreatRelationType.AssociatedWith,
+                    cancellationToken);
         }
 
+        /*
+         * حالا Domain را DNS enrich می‌کنیم.
+         * این مرحله می‌تواند Domain → IP relation بسازد.
+         */
         createdRelations +=
             await CorrelateDomainWithIpAsync(
                 domainIndicator,
@@ -300,7 +343,8 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                         IsDeleted = false
                     };
 
-                await _dbContext.ThreatIndicators
+                await _dbContext
+                    .ThreatIndicators
                     .AddAsync(
                         ipIndicator,
                         cancellationToken);
@@ -310,7 +354,8 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
             }
 
             var relationExists =
-                await _dbContext.ThreatIndicatorRelations
+                await _dbContext
+                    .ThreatIndicatorRelations
                     .AnyAsync(
                         x =>
                             x.SourceIndicatorId ==
@@ -318,7 +363,8 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                             x.TargetIndicatorId ==
                                 ipIndicator.Id &&
                             x.RelationType ==
-                                ThreatRelationType.ResolvesTo &&
+                                ThreatRelationType
+                                    .ResolvesTo &&
                             !x.IsDeleted,
                         cancellationToken);
 
@@ -361,18 +407,42 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                     IsDeleted = false
                 };
 
-            await _dbContext.ThreatIndicatorRelations
+            await _dbContext
+                .ThreatIndicatorRelations
                 .AddAsync(
                     relation,
                     cancellationToken);
 
-            createdRelations++;
-        }
-
-        if (createdRelations > 0)
-        {
             await _dbContext.SaveChangesAsync(
                 cancellationToken);
+
+            createdRelations++;
+
+            /*
+             * Domain روی watchlist باشد:
+             * Domain → IP
+             */
+            await _threatAlertService
+                .CreateNewRelationAlertsAsync(
+                    domainIndicator.Id,
+                    domainIndicator.Value,
+                    domainIndicator.Severity,
+                    ipIndicator.Value,
+                    ThreatRelationType.ResolvesTo,
+                    cancellationToken);
+
+            /*
+             * IP روی watchlist باشد:
+             * IP ← Domain
+             */
+            await _threatAlertService
+                .CreateNewRelationAlertsAsync(
+                    ipIndicator.Id,
+                    ipIndicator.Value,
+                    ipIndicator.Severity,
+                    domainIndicator.Value,
+                    ThreatRelationType.ResolvesTo,
+                    cancellationToken);
         }
 
         return createdRelations;
