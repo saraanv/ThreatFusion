@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.Create;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.Search;
 using Microsoft.AspNetCore.Authorization;
+using ThreatFusion.Threat.API.Models;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.GetById;
 using ThreatFusion.Threat.Application.Features.ThreatIndicators.GetList;
 
@@ -34,10 +35,12 @@ public sealed class ThreatIndicatorsController : ControllerBase
     
         if (!result.IsSuccess)
         {
-            return BadRequest(new
-            {
-                Errors = result.Errors
-            });
+            return BadRequest(
+                new ApiErrorResponse(
+                    "ValidationError",
+                    "Failed to create or update threat indicator.",
+                    result.Errors,
+                    HttpContext.TraceIdentifier));
         }
     
         return Ok(new
@@ -94,7 +97,12 @@ public sealed class ThreatIndicatorsController : ControllerBase
 
         if (result == null)
         {
-            return NotFound();
+            return NotFound(
+                new ApiErrorResponse(
+                    "NotFound",
+                    "Threat indicator was not found.",
+                    null,
+                    HttpContext.TraceIdentifier));
         }
 
 

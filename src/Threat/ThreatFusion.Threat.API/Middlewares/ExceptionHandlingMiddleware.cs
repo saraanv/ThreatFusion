@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using ThreatFusion.Threat.API.Models;
 
 namespace ThreatFusion.Threat.API.Middlewares;
 
@@ -86,13 +87,11 @@ public sealed class ExceptionHandlingMiddleware
             "application/json";
 
         var response =
-            new
-            {
-                ErrorCode = errorCode,
-                Message = message,
-                TraceId =
-                    context.TraceIdentifier
-            };
+            new ApiErrorResponse(
+                errorCode,
+                message,
+                null,
+                context.TraceIdentifier);
 
         var json =
             JsonSerializer.Serialize(

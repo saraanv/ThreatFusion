@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ThreatFusion.Threat.API.Models;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.Create;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.GetByIndicator;
 using ThreatFusion.Threat.Application.Features.ThreatRelations.GetGraph;
@@ -36,10 +37,12 @@ public sealed class ThreatRelationsController
 
         if (!result.IsSuccess)
         {
-            return BadRequest(new
-            {
-                Errors = result.Errors
-            });
+            return BadRequest(
+                new ApiErrorResponse(
+                    "ValidationError",
+                    "Failed to create or update threat indicator.",
+                    result.Errors,
+                    HttpContext.TraceIdentifier));
         }
 
         return StatusCode(

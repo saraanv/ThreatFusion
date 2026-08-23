@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ThreatFusion.Threat.API.Models;
 using ThreatFusion.Threat.API.Services;
 using ThreatFusion.Threat.Application.Features.Watchlists.Add;
 using ThreatFusion.Threat.Application.Features.Watchlists.GetMine;
@@ -44,10 +45,12 @@ public sealed class WatchlistsController
 
         if (!result.IsSuccess)
         {
-            return BadRequest(new
-            {
-                Errors = result.Errors
-            });
+            return BadRequest(
+                new ApiErrorResponse(
+                    "ValidationError",
+                    "Failed to add indicator to watchlist.",
+                    result.Errors,
+                    HttpContext.TraceIdentifier));
         }
 
         return Ok(new
@@ -74,7 +77,12 @@ public sealed class WatchlistsController
 
         if (!removed)
         {
-            return NotFound();
+            return NotFound(
+                new ApiErrorResponse(
+                    "NotFound",
+                    "Watchlist item was not found.",
+                    null,
+                    HttpContext.TraceIdentifier));
         }
 
         return NoContent();
