@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { login } from '../services/api'
+import { useNavigate } from 'react-router-dom'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+const navigate = useNavigate()
 
   async function handleSubmit(
   event: React.FormEvent<HTMLFormElement>
@@ -38,6 +40,8 @@ function LoginPage() {
       'Login successful:',
       result
     )
+
+    navigate('/dashboard')
   } catch (error) {
     console.error(
       'Login error:',
