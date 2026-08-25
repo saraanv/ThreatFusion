@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ThreatFusion.Threat.API.props" />
+</Project>

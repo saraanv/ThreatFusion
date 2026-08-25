@@ -1,0 +1,16 @@
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.csproj.AssemblyReference.cache
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.AssemblyInfoInputs.cache
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.AssemblyInfo.cs
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.csproj.CoreCompileInputs.cache
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.sourcelink.json
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\bin\Debug\net8.0\ThreatFusion.Threat.Application.deps.json
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\bin\Debug\net8.0\ThreatFusion.Threat.Application.dll
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\bin\Debug\net8.0\ThreatFusion.Threat.Application.pdb
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\bin\Debug\net8.0\ThreatFusion.Threat.Domain.dll
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\bin\Debug\net8.0\ThreatFusion.Threat.Domain.pdb
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFu.4B356DBF.Up2Date
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.dll
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\refint\ThreatFusion.Threat.Application.dll
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ThreatFusion.Threat.Application.pdb
+F:\ThreatFusion\src\Threat\ThreatFusion.Threat.Application\obj\Debug\net8.0\ref\ThreatFusion.Threat.Application.dll

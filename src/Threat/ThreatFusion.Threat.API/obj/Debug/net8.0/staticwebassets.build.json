@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "hJAxByi8Zp4Hlg9w7NWcs1uFOGxEerRIncZwK4uHJKY=",
+  "Source": "ThreatFusion.Threat.API",
+  "BasePath": "_content/ThreatFusion.Threat.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
