@@ -5,6 +5,9 @@ import {
   Routes,
 } from 'react-router-dom'
 
+import ThreatIndicatorDetailsPage
+  from './pages/ThreatIndicatorDetailsPage'
+
 import LoginPage
   from './pages/LoginPage'
 
@@ -54,6 +57,12 @@ function App() {
               <ThreatIndicatorsPage />
             }
           />
+          <Route
+  path="/indicators/:id"
+  element={
+    <ThreatIndicatorDetailsPage />
+  }
+/>
 
         </Route>
 
