@@ -754,3 +754,18 @@ input {
     width: 100%;
   }
 }
+
+.watchlist-success {
+  color: #22c55e;
+  margin-top: 10px;
+}
+
+.watchlist-error {
+  color: #ef4444;
+  margin-top: 10px;
+}
+
+.primary-action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
