@@ -4,7 +4,8 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
-
+import WatchlistPage
+  from './pages/WatchlistPage'
 import ThreatIndicatorDetailsPage
   from './pages/ThreatIndicatorDetailsPage'
 
@@ -65,6 +66,13 @@ function App() {
 />
 
         </Route>
+
+<Route
+  path="/watchlist"
+  element={
+    <WatchlistPage />
+  }
+/>
 
         <Route
           path="/"
