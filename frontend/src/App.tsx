@@ -5,20 +5,32 @@ import {
   Routes,
 } from 'react-router-dom'
 
-import LoginPage from './pages/LoginPage'
-import DashboardPage from './pages/DashboardPage'
+import LoginPage
+  from './pages/LoginPage'
 
-import ProtectedRoute from './components/ProtectedRoute'
-import AppLayout from './components/AppLayout'
+import DashboardPage
+  from './pages/DashboardPage'
+
+import ThreatIndicatorsPage
+  from './pages/ThreatIndicatorsPage'
+
+import ProtectedRoute
+  from './components/ProtectedRoute'
+
+import AppLayout
+  from './components/AppLayout'
 
 function App() {
   return (
     <BrowserRouter>
+
       <Routes>
 
         <Route
           path="/login"
-          element={<LoginPage />}
+          element={
+            <LoginPage />
+          }
         />
 
         <Route
@@ -28,10 +40,21 @@ function App() {
             </ProtectedRoute>
           }
         >
+
           <Route
             path="/dashboard"
-            element={<DashboardPage />}
+            element={
+              <DashboardPage />
+            }
           />
+
+          <Route
+            path="/indicators"
+            element={
+              <ThreatIndicatorsPage />
+            }
+          />
+
         </Route>
 
         <Route
@@ -45,6 +68,7 @@ function App() {
         />
 
       </Routes>
+
     </BrowserRouter>
   )
 }

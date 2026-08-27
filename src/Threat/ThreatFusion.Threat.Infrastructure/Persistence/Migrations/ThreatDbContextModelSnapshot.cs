@@ -212,6 +212,8 @@ namespace ThreatFusion.Threat.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IsDeleted", "CreatedAtUtc");
+
                     b.HasIndex("Type", "Value")
                         .IsUnique();
 

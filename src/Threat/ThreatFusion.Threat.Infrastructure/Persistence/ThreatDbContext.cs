@@ -103,6 +103,12 @@ public sealed class ThreatDbContext
 
             entity.HasQueryFilter(x =>
                 !x.IsDeleted);
+entity.HasIndex(x => new
+            {
+                x.IsDeleted,
+                x.CreatedAtUtc
+            });            
+
         });
 
         /*
