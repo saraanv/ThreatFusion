@@ -3,8 +3,9 @@ import type {
   ThreatIndicatorListResponse,
 } from '../types/threatIndicator'
 
-const API_BASE_URL =
-  'http://localhost:5152'
+import {
+  apiFetch,
+} from './apiClient'
 
 export interface ThreatIndicatorFilters {
   searchTerm?: string
@@ -22,14 +23,6 @@ export async function getThreatIndicators(
   pageSize: number = 20,
   filters: ThreatIndicatorFilters = {}
 ): Promise<ThreatIndicatorListResponse> {
-  const token =
-    localStorage.getItem('accessToken')
-
-  if (!token) {
-    throw new Error(
-      'Access token not found.'
-    )
-  }
 
   const params =
     new URLSearchParams()
@@ -107,21 +100,19 @@ export async function getThreatIndicators(
   }
 
   const response =
-    await fetch(
-      `${API_BASE_URL}/threat/api/threat-indicators/GetThreatIndicators?${params.toString()}`,
+    await apiFetch(
+      `/threat/api/threat-indicators/GetThreatIndicators?${params.toString()}`,
       {
         method: 'GET',
-
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
       }
     )
 
   if (!response.ok) {
+    const errorText =
+      await response.text()
+
     throw new Error(
-      `Failed to load threat indicators. Status: ${response.status}`
+      `Failed to load threat indicators. Status: ${response.status}. ${errorText}`
     )
   }
 
@@ -131,31 +122,29 @@ export async function getThreatIndicators(
 export async function getThreatIndicatorById(
   id: number
 ): Promise<ThreatIndicator> {
-  const token =
-    localStorage.getItem('accessToken')
 
-  if (!token) {
-    throw new Error(
-      'Access token not found.'
-    )
-  }
+  const params =
+    new URLSearchParams()
+
+  params.set(
+    'id',
+    id.toString()
+  )
 
   const response =
-    await fetch(
-      `${API_BASE_URL}/threat/api/threat-indicators/GetThreatIndicatorById?id=${id}`,
+    await apiFetch(
+      `/threat/api/threat-indicators/GetThreatIndicatorById?${params.toString()}`,
       {
         method: 'GET',
-
-        headers: {
-          Authorization:
-            `Bearer ${token}`,
-        },
       }
     )
 
   if (!response.ok) {
+    const errorText =
+      await response.text()
+
     throw new Error(
-      `Failed to load threat indicator. Status: ${response.status}`
+      `Failed to load threat indicator. Status: ${response.status}. ${errorText}`
     )
   }
 
