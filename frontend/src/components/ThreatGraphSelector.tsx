@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import {
+  apiFetch,
+} from '../services/apiClient'
+
 interface GraphSearchIndicator {
   id: number
   type: string
@@ -18,8 +22,6 @@ interface SearchResponse {
   totalCount: number
   totalPages: number
 }
-
-const API_BASE_URL = 'http://localhost:5152'
 
 function ThreatGraphSelector() {
   const navigate = useNavigate()
@@ -43,19 +45,6 @@ function ThreatGraphSelector() {
     if (!searchTerm.trim()) {
       setError(
         'Enter an indicator value to search.'
-      )
-
-      return
-    }
-
-    const token =
-      localStorage.getItem(
-        'accessToken'
-      )
-
-    if (!token) {
-      setError(
-        'Access token not found.'
       )
 
       return
@@ -85,15 +74,10 @@ function ThreatGraphSelector() {
       )
 
       const response =
-        await fetch(
-          `${API_BASE_URL}/threat/api/threat-indicators/GetThreatIndicators?${params.toString()}`,
+        await apiFetch(
+          `/threat/api/threat-indicators/GetThreatIndicators?${params.toString()}`,
           {
             method: 'GET',
-
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
           }
         )
 

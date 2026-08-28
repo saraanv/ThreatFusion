@@ -1,27 +1,28 @@
-import type { DashboardOverview } from '../types/dashboard'
+import type {
+  DashboardOverview,
+} from '../types/dashboard'
 
-const API_BASE_URL = 'http://localhost:5152'
+import {
+  apiFetch,
+} from './apiClient'
 
-export async function getDashboardOverview(): Promise<DashboardOverview> {
-  const token = localStorage.getItem('accessToken')
+export async function getDashboardOverview():
+  Promise<DashboardOverview> {
 
-  if (!token) {
-    throw new Error('Access token not found.')
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/threat/api/dashboard/GetOverview`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  )
+  const response =
+    await apiFetch(
+      '/threat/api/dashboard/GetOverview',
+      {
+        method: 'GET',
+      }
+    )
 
   if (!response.ok) {
+    const errorText =
+      await response.text()
+
     throw new Error(
-      `Failed to load dashboard. Status: ${response.status}`
+      `Failed to load dashboard. Status: ${response.status}. ${errorText}`
     )
   }
 

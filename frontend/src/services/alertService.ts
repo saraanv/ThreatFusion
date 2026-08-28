@@ -3,41 +3,27 @@ import type {
   UnreadAlertCount,
 } from '../types/alert'
 
-const API_BASE_URL =
-  'http://localhost:5152'
-
-function getAccessToken(): string {
-  const token =
-    localStorage.getItem('accessToken')
-
-  if (!token) {
-    throw new Error(
-      'Access token not found.'
-    )
-  }
-
-  return token
-}
+import {
+  apiFetch,
+} from './apiClient'
 
 export async function getMyAlerts():
   Promise<ThreatAlert[]> {
-  const token = getAccessToken()
 
-  const response = await fetch(
-    `${API_BASE_URL}/threat/api/alerts/GetMyAlerts`,
-    {
-      method: 'GET',
-
-      headers: {
-        Authorization:
-          `Bearer ${token}`,
-      },
-    }
-  )
+  const response =
+    await apiFetch(
+      '/threat/api/alerts/GetMyAlerts',
+      {
+        method: 'GET',
+      }
+    )
 
   if (!response.ok) {
+    const errorText =
+      await response.text()
+
     throw new Error(
-      `Failed to load alerts. Status: ${response.status}`
+      `Failed to load alerts. Status: ${response.status}. ${errorText}`
     )
   }
 
@@ -46,23 +32,21 @@ export async function getMyAlerts():
 
 export async function getUnreadAlertCount():
   Promise<number> {
-  const token = getAccessToken()
 
-  const response = await fetch(
-    `${API_BASE_URL}/threat/api/alerts/GetUnreadAlertCount`,
-    {
-      method: 'GET',
-
-      headers: {
-        Authorization:
-          `Bearer ${token}`,
-      },
-    }
-  )
+  const response =
+    await apiFetch(
+      '/threat/api/alerts/GetUnreadAlertCount',
+      {
+        method: 'GET',
+      }
+    )
 
   if (!response.ok) {
+    const errorText =
+      await response.text()
+
     throw new Error(
-      `Failed to load unread alert count. Status: ${response.status}`
+      `Failed to load unread alert count. Status: ${response.status}. ${errorText}`
     )
   }
 
@@ -76,23 +60,29 @@ export async function getUnreadAlertCount():
 export async function markAlertAsRead(
   alertId: number
 ): Promise<void> {
-  const token = getAccessToken()
 
-  const response = await fetch(
-    `${API_BASE_URL}/threat/api/alerts/MarkAlertAsRead?alertId=${alertId}`,
-    {
-      method: 'PATCH',
+  const params =
+    new URLSearchParams()
 
-      headers: {
-        Authorization:
-          `Bearer ${token}`,
-      },
-    }
+  params.set(
+    'alertId',
+    alertId.toString()
   )
 
+  const response =
+    await apiFetch(
+      `/threat/api/alerts/MarkAlertAsRead?${params.toString()}`,
+      {
+        method: 'PATCH',
+      }
+    )
+
   if (!response.ok) {
+    const errorText =
+      await response.text()
+
     throw new Error(
-      `Failed to mark alert as read. Status: ${response.status}`
+      `Failed to mark alert as read. Status: ${response.status}. ${errorText}`
     )
   }
 }
