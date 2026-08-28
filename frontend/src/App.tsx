@@ -27,6 +27,11 @@ import AppLayout
 
 import AlertsPage
   from './pages/AlertsPage'
+import RegisterPage
+  from './pages/RegisterPage'
+
+import CreateThreatIndicatorPage
+  from './pages/CreateThreatIndicatorPage'
 
 function App() {
   return (
@@ -40,7 +45,12 @@ function App() {
             <LoginPage />
           }
         />
-
+<Route
+  path="/register"
+  element={
+    <RegisterPage />
+  }
+/>
         <Route
           element={
             <ProtectedRoute>
@@ -57,12 +67,20 @@ function App() {
           />
 
           <Route
-            path="/indicators"
-            element={
-              <ThreatIndicatorsPage />
-            }
-          />
-          <Route
+  path="/indicators"
+  element={
+    <ThreatIndicatorsPage />
+  }
+/>
+
+<Route
+  path="/indicators/create"
+  element={
+    <CreateThreatIndicatorPage />
+  }
+/>
+
+<Route
   path="/indicators/:id"
   element={
     <ThreatIndicatorDetailsPage />

@@ -1,14 +1,28 @@
 import {
+  useEffect,
+  useState,
+} from 'react'
+
+import {
   Outlet,
   useLocation,
   useNavigate,
 } from 'react-router-dom'
 
-import { getCurrentUserRoles } from '../utils/auth'
+import {
+  getCurrentUserRoles,
+} from '../utils/auth'
+
+import {
+  getUnreadAlertCount,
+} from '../services/alertService'
 
 function AppLayout() {
   const navigate = useNavigate()
   const location = useLocation()
+
+  const [unreadAlertCount, setUnreadAlertCount] =
+    useState(0)
 
   const userJson =
     localStorage.getItem('user')
@@ -17,7 +31,26 @@ function AppLayout() {
     ? JSON.parse(userJson)
     : null
 
-const roles = getCurrentUserRoles()
+  const roles =
+    getCurrentUserRoles()
+
+  useEffect(() => {
+    async function loadUnreadAlertCount() {
+      try {
+        const count =
+          await getUnreadAlertCount()
+
+        setUnreadAlertCount(count)
+      } catch (error) {
+        console.error(
+          'Failed to load unread alert count:',
+          error
+        )
+      }
+    }
+
+    loadUnreadAlertCount()
+  }, [location.pathname])
 
   function handleLogout() {
     localStorage.removeItem('accessToken')
@@ -105,7 +138,15 @@ const roles = getCurrentUserRoles()
               navigate('/alerts')
             }
           >
-            Alerts
+            <span>Alerts</span>
+
+            {unreadAlertCount > 0 && (
+              <span className="sidebar-alert-badge">
+                {unreadAlertCount > 99
+                  ? '99+'
+                  : unreadAlertCount}
+              </span>
+            )}
           </button>
 
         </nav>
@@ -125,22 +166,24 @@ const roles = getCurrentUserRoles()
           <div className="header-user">
 
             {user && (
-  <div className="header-user-info">
-    <span>
-      {user.firstName}{' '}
-      {user.lastName}
-    </span>
+              <div className="header-user-info">
 
-    {roles.map(role => (
-      <span
-        key={role}
-        className="role-badge"
-      >
-        {role}
-      </span>
-    ))}
-  </div>
-)}
+                <span>
+                  {user.firstName}{' '}
+                  {user.lastName}
+                </span>
+
+                {roles.map(role => (
+                  <span
+                    key={role}
+                    className="role-badge"
+                  >
+                    {role}
+                  </span>
+                ))}
+
+              </div>
+            )}
 
             <button
               onClick={handleLogout}

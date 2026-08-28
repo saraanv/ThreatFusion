@@ -95,6 +95,18 @@ const navigate = useNavigate()
             Sign in
           </button>
         </form>
+        <div className="auth-switch">
+  Don't have an account?{' '}
+
+  <button
+    type="button"
+    onClick={() =>
+      navigate('/register')
+    }
+  >
+    Create account
+  </button>
+</div>
       </div>
     </div>
   )

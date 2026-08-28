@@ -1,6 +1,8 @@
 import type {
   ThreatIndicator,
   ThreatIndicatorListResponse,
+  CreateThreatIndicatorRequest,
+  CreateThreatIndicatorResponse,
 } from '../types/threatIndicator'
 
 import {
@@ -150,3 +152,43 @@ export async function getThreatIndicatorById(
 
   return response.json()
 }
+
+export async function createThreatIndicator(
+  request: CreateThreatIndicatorRequest
+): Promise<CreateThreatIndicatorResponse> {
+  const response = await apiFetch(
+    '/threat/api/threat-indicators/CreateThreatIndicator',
+    {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }
+  )
+
+  if (!response.ok) {
+    let message =
+      'Failed to create threat indicator.'
+
+    try {
+      const errorData = await response.json()
+
+      if (
+        Array.isArray(errorData.errors) &&
+        errorData.errors.length > 0
+      ) {
+        message =
+          errorData.errors.join(', ')
+      } else if (errorData.message) {
+        message =
+          errorData.message
+      }
+    } catch {
+      // اگر response JSON نبود،
+      // همان message عمومی نمایش داده می‌شود.
+    }
+
+    throw new Error(message)
+  }
+
+  return response.json()
+}
+

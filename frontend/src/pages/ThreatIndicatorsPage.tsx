@@ -14,6 +14,9 @@ import {
 import type {
   ThreatIndicator,
 } from '../types/threatIndicator'
+import {
+  hasAnyRole,
+} from '../utils/auth'
 
 function ThreatIndicatorsPage() {
   const [indicators, setIndicators] =
@@ -67,8 +70,15 @@ function ThreatIndicatorsPage() {
 
     const navigate =
   useNavigate()
+const canCreateIndicator =
+  hasAnyRole([
+    'Analyst',
+    'Admin',
+  ])
+
 const [addingToWatchlist, setAddingToWatchlist] =
   useState(false)
+
 
 const [watchlistMessage, setWatchlistMessage] =
   useState('')
@@ -216,11 +226,27 @@ const [watchlistError, setWatchlistError] =
           </p>
         </div>
 
-        <div className="indicator-count">
-          {totalCount}
-          {' '}
-          indicators
-        </div>
+        <div className="page-heading-actions">
+
+  <div className="indicator-count">
+    {totalCount}
+    {' '}
+    indicators
+  </div>
+
+  {canCreateIndicator && (
+    <button
+      type="button"
+      className="create-indicator-button"
+      onClick={() =>
+        navigate('/indicators/create')
+      }
+    >
+      + Create Indicator
+    </button>
+  )}
+
+</div>
 
       </div>
 

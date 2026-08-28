@@ -1466,3 +1466,77 @@ input {
   font-size: 11px;
   font-weight: 600;
 }
+
+.sidebar-nav button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sidebar-alert-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 22px;
+  height: 22px;
+
+  padding: 0 7px;
+
+  background: #ef4444;
+  color: #ffffff;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.auth-switch {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.auth-switch button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #818cf8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-switch button:hover {
+  color: #a5b4fc;
+  text-decoration: underline;
+}
+
+.auth-error {
+  margin: 10px 0;
+  color: #f87171;
+  font-size: 14px;
+}
+
+.page-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.create-indicator-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.create-indicator-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

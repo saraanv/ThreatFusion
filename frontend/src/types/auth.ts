@@ -10,3 +10,15 @@ export interface LoginResponse {
   expiresAtUtc: string
   user: User
 }
+
+export interface RegisterUserRequest {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+}
+
+export interface RegisterUserResponse {
+  userId: number
+  message: string
+}
