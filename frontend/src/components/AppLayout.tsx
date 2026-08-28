@@ -1,7 +1,14 @@
-import { Outlet, useNavigate } from 'react-router-dom'
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
+
+import { getCurrentUserRoles } from '../utils/auth'
 
 function AppLayout() {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const userJson =
     localStorage.getItem('user')
@@ -9,6 +16,8 @@ function AppLayout() {
   const user = userJson
     ? JSON.parse(userJson)
     : null
+
+const roles = getCurrentUserRoles()
 
   function handleLogout() {
     localStorage.removeItem('accessToken')
@@ -18,10 +27,15 @@ function AppLayout() {
     navigate('/login')
   }
 
+  function isActive(path: string) {
+    return location.pathname.startsWith(path)
+  }
+
   return (
     <div className="app-layout">
 
       <aside className="sidebar">
+
         <div className="sidebar-logo">
           <h2>ThreatFusion</h2>
           <span>Threat Intelligence</span>
@@ -30,6 +44,11 @@ function AppLayout() {
         <nav className="sidebar-nav">
 
           <button
+            className={
+              isActive('/dashboard')
+                ? 'active'
+                : ''
+            }
             onClick={() =>
               navigate('/dashboard')
             }
@@ -38,38 +57,59 @@ function AppLayout() {
           </button>
 
           <button
-  onClick={() =>
-    navigate('/indicators')
-  }
->
-  Threat Indicators
-</button>
+            className={
+              isActive('/indicators')
+                ? 'active'
+                : ''
+            }
+            onClick={() =>
+              navigate('/indicators')
+            }
+          >
+            Threat Indicators
+          </button>
 
           <button
-  onClick={() =>
-    navigate('/graph')
-  }
->
-  Threat Graph
-</button>
+            className={
+              isActive('/graph')
+                ? 'active'
+                : ''
+            }
+            onClick={() =>
+              navigate('/graph')
+            }
+          >
+            Threat Graph
+          </button>
 
           <button
-  onClick={() =>
-    navigate('/watchlist')
-  }
->
-  Watchlist
-</button>
+            className={
+              isActive('/watchlist')
+                ? 'active'
+                : ''
+            }
+            onClick={() =>
+              navigate('/watchlist')
+            }
+          >
+            Watchlist
+          </button>
 
           <button
-  onClick={() =>
-    navigate('/alerts')
-  }
->
-  Alerts
-</button>
+            className={
+              isActive('/alerts')
+                ? 'active'
+                : ''
+            }
+            onClick={() =>
+              navigate('/alerts')
+            }
+          >
+            Alerts
+          </button>
 
         </nav>
+
       </aside>
 
       <div className="main-area">
@@ -85,11 +125,22 @@ function AppLayout() {
           <div className="header-user">
 
             {user && (
-              <span>
-                {user.firstName}{' '}
-                {user.lastName}
-              </span>
-            )}
+  <div className="header-user-info">
+    <span>
+      {user.firstName}{' '}
+      {user.lastName}
+    </span>
+
+    {roles.map(role => (
+      <span
+        key={role}
+        className="role-badge"
+      >
+        {role}
+      </span>
+    ))}
+  </div>
+)}
 
             <button
               onClick={handleLogout}

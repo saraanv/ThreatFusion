@@ -205,6 +205,18 @@ input {
   color: white;
 }
 
+.sidebar-nav button.active {
+  background: #312e81;
+  color: #ffffff;
+  font-weight: 600;
+
+  border-left: 3px solid #818cf8;
+}
+
+.sidebar-nav button.active:hover {
+  background: #3730a3;
+}
+
 .main-area {
   flex: 1;
   min-width: 0;
@@ -1434,4 +1446,23 @@ input {
   .graph-search-result-info {
     flex-wrap: wrap;
   }
+}
+
+.header-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-badge {
+  padding: 4px 8px;
+
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 600;
 }
