@@ -8,7 +8,8 @@ import WatchlistPage
   from './pages/WatchlistPage'
 import ThreatIndicatorDetailsPage
   from './pages/ThreatIndicatorDetailsPage'
-
+import ThreatGraphPage
+  from './pages/ThreatGraphPage'
 import LoginPage
   from './pages/LoginPage'
 
@@ -23,6 +24,9 @@ import ProtectedRoute
 
 import AppLayout
   from './components/AppLayout'
+
+import AlertsPage
+  from './pages/AlertsPage'
 
 function App() {
   return (
@@ -83,6 +87,18 @@ function App() {
             />
           }
         />
+
+<Route
+  path="/alerts"
+  element={
+    <AlertsPage />
+  }
+/>
+
+<Route
+  path="/graph"
+  element={<ThreatGraphPage />}
+/>
 
       </Routes>
 

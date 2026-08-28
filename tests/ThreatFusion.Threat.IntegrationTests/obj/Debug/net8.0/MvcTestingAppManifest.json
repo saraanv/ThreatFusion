@@ -1,0 +1,6 @@
+{
+  "ThreatFusion.Threat.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\ThreatFusion\\src\\Threat\\ThreatFusion.Threat.API",
+  "ThreatFusion.Threat.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\ThreatFusion\\src\\Threat\\ThreatFusion.Threat.Application",
+  "ThreatFusion.Threat.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\ThreatFusion\\src\\Threat\\ThreatFusion.Threat.Domain",
+  "ThreatFusion.Threat.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "F:\\ThreatFusion\\src\\Threat\\ThreatFusion.Threat.Infrastructure"
+}
