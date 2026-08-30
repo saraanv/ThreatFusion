@@ -33,6 +33,9 @@ import RegisterPage
 import CreateThreatIndicatorPage
   from './pages/CreateThreatIndicatorPage'
 
+import RoleProtectedRoute
+  from './components/RoleProtectedRoute'
+
 function App() {
   return (
     <BrowserRouter>
@@ -76,7 +79,14 @@ function App() {
 <Route
   path="/indicators/create"
   element={
-    <CreateThreatIndicatorPage />
+    <RoleProtectedRoute
+      allowedRoles={[
+        'Analyst',
+        'Admin',
+      ]}
+    >
+      <CreateThreatIndicatorPage />
+    </RoleProtectedRoute>
   }
 />
 

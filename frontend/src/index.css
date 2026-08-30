@@ -1540,3 +1540,330 @@ input {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* =========================================
+   CREATE THREAT INDICATOR
+   ========================================= */
+
+.create-indicator-page {
+  width: 100%;
+}
+
+.create-indicator-page .page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.create-indicator-page .page-heading h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.create-indicator-page .page-heading p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* =========================================
+   FORM CONTAINER
+   ========================================= */
+
+.indicator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* =========================================
+   FORM SECTIONS
+   ========================================= */
+
+.indicator-form .form-section {
+  padding: 24px;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  background: #0f172a;
+}
+
+.indicator-form .form-section h2 {
+  margin: 0 0 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #1e293b;
+
+  color: #f1f5f9;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* =========================================
+   GRID
+   ========================================= */
+
+.indicator-form .form-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.indicator-form .form-grid-full {
+  grid-column: 1 / -1;
+}
+
+/* =========================================
+   LABELS
+   ========================================= */
+
+.indicator-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.indicator-form .form-group label {
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* =========================================
+   INPUT / SELECT / TEXTAREA
+   ========================================= */
+
+.indicator-form .form-group input,
+.indicator-form .form-group select,
+.indicator-form .form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  background: #020617;
+  color: #f8fafc;
+
+  padding: 11px 12px;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.indicator-form .form-group input,
+.indicator-form .form-group select {
+  min-height: 43px;
+}
+
+.indicator-form .form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* =========================================
+   PLACEHOLDER
+   ========================================= */
+
+.indicator-form
+.form-group
+input::placeholder,
+.indicator-form
+.form-group
+textarea::placeholder {
+  color: #64748b;
+}
+
+/* =========================================
+   FOCUS
+   ========================================= */
+
+.indicator-form .form-group input:focus,
+.indicator-form .form-group select:focus,
+.indicator-form .form-group textarea:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(99, 102, 241, 0.15);
+}
+
+/* =========================================
+   SELECT
+   ========================================= */
+
+.indicator-form .form-group select {
+  cursor: pointer;
+}
+
+/* =========================================
+   ERROR
+   ========================================= */
+
+.indicator-form .form-error {
+  padding: 12px 14px;
+
+  border: 1px solid
+    rgba(248, 113, 113, 0.35);
+
+  border-radius: 8px;
+
+  background:
+    rgba(127, 29, 29, 0.2);
+
+  color: #fca5a5;
+
+  font-size: 14px;
+}
+
+/* =========================================
+   ACTION BUTTONS
+   ========================================= */
+
+.indicator-form .form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  padding-top: 4px;
+}
+
+.indicator-form
+.form-actions
+button {
+  min-width: 130px;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 11px 18px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.1s ease;
+}
+
+/* Save Indicator */
+
+.indicator-form
+.form-actions
+button[type='submit'] {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.indicator-form
+.form-actions
+button[type='submit']:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+/* Cancel */
+
+.indicator-form
+.form-actions
+.secondary-button {
+  border: 1px solid #334155;
+
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+.indicator-form
+.form-actions
+.secondary-button:hover:not(:disabled) {
+  background: #334155;
+  color: #ffffff;
+}
+
+.indicator-form
+.form-actions
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.indicator-form
+.form-actions
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   BACK TO INDICATORS BUTTON
+   ========================================= */
+
+.create-indicator-page
+.page-heading
+.secondary-button {
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  background: #1e293b;
+  color: #cbd5e1;
+
+  padding: 10px 16px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.create-indicator-page
+.page-heading
+.secondary-button:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+  .create-indicator-page .page-heading {
+    flex-direction: column;
+  }
+
+  .indicator-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .indicator-form .form-grid-full {
+    grid-column: auto;
+  }
+
+  .indicator-form .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .indicator-form
+  .form-actions
+  button {
+    width: 100%;
+  }
+}
