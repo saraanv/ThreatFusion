@@ -2231,3 +2231,246 @@ button:disabled {
     width: 100%;
   }
 }
+
+/* =========================================
+   ASSIGN ROLE
+   ========================================= */
+
+.assign-role-page {
+  width: 100%;
+}
+
+.assign-role-page .page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.assign-role-page .page-heading h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.assign-role-page .page-heading p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.assign-role-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.assign-role-form .form-section {
+  padding: 24px;
+
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+
+  background: #0f172a;
+}
+
+.assign-role-form .form-section h2 {
+  margin: 0 0 22px;
+  padding-bottom: 14px;
+
+  border-bottom: 1px solid #1e293b;
+
+  color: #f1f5f9;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.assign-role-form .form-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.assign-role-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assign-role-form .form-group label {
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.assign-role-form input,
+.assign-role-form select {
+  width: 100%;
+  min-height: 43px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  background: #020617;
+  color: #f8fafc;
+
+  padding: 11px 12px;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+}
+
+.assign-role-form input:focus,
+.assign-role-form select:focus {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(99, 102, 241, 0.15);
+}
+
+.role-help {
+  margin-top: 24px;
+
+  padding: 16px;
+
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+
+  background: #020617;
+}
+
+.role-help strong {
+  display: block;
+  margin-bottom: 10px;
+
+  color: #f8fafc;
+  font-size: 14px;
+}
+
+.role-help p {
+  margin: 7px 0;
+
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.assign-role-form .form-error,
+.assign-role-form .form-success {
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.assign-role-form .form-error {
+  border: 1px solid
+    rgba(248, 113, 113, 0.35);
+
+  background:
+    rgba(127, 29, 29, 0.2);
+
+  color: #fca5a5;
+}
+
+.assign-role-form .form-success {
+  border: 1px solid
+    rgba(74, 222, 128, 0.3);
+
+  background:
+    rgba(20, 83, 45, 0.2);
+
+  color: #86efac;
+}
+
+.assign-role-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.assign-role-form
+.form-actions
+button {
+  min-width: 130px;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 11px 18px;
+
+  font-family: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.assign-role-form
+.form-actions
+button[type='submit'] {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.assign-role-form
+.form-actions
+button[type='submit']:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.assign-role-form
+.form-actions
+.secondary-button,
+.assign-role-page
+.page-heading
+.secondary-button {
+  border: 1px solid #334155;
+
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+.assign-role-page
+.page-heading
+.secondary-button {
+  border-radius: 8px;
+  padding: 10px 16px;
+
+  font-family: inherit;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.assign-role-form
+.form-actions
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .assign-role-page .page-heading {
+    flex-direction: column;
+  }
+
+  .assign-role-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .assign-role-form .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .assign-role-form
+  .form-actions
+  button {
+    width: 100%;
+  }
+}

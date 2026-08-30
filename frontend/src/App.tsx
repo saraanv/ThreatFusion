@@ -39,6 +39,9 @@ import RoleProtectedRoute
 import CreateThreatRelationPage
   from './pages/CreateThreatRelationPage'
 
+import AssignRolePage
+  from './pages/AssignRolePage'
+
 function App() {
   return (
     <BrowserRouter>
@@ -118,6 +121,19 @@ function App() {
             />
           }
         />
+
+        <Route
+  path="/admin/assign-role"
+  element={
+    <RoleProtectedRoute
+      allowedRoles={[
+        'Admin',
+      ]}
+    >
+      <AssignRolePage />
+    </RoleProtectedRoute>
+  }
+/>
 
 <Route
   path="/indicators/:sourceIndicatorId/create-relation"

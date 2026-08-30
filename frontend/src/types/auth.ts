@@ -22,3 +22,17 @@ export interface RegisterUserResponse {
   userId: number
   message: string
 }
+
+export type AssignableRole =
+  | 'Admin'
+  | 'Analyst'
+  | 'Viewer'
+
+export interface AssignRoleRequest {
+  userId: number
+  role: AssignableRole
+}
+
+export interface AssignRoleResponse {
+  message: string
+}
