@@ -36,6 +36,9 @@ import CreateThreatIndicatorPage
 import RoleProtectedRoute
   from './components/RoleProtectedRoute'
 
+import CreateThreatRelationPage
+  from './pages/CreateThreatRelationPage'
+
 function App() {
   return (
     <BrowserRouter>
@@ -115,6 +118,20 @@ function App() {
             />
           }
         />
+
+<Route
+  path="/indicators/:sourceIndicatorId/create-relation"
+  element={
+    <RoleProtectedRoute
+      allowedRoles={[
+        'Analyst',
+        'Admin',
+      ]}
+    >
+      <CreateThreatRelationPage />
+    </RoleProtectedRoute>
+  }
+/>
 
 <Route
   path="/alerts"

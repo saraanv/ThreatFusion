@@ -2,17 +2,23 @@ import {
   useEffect,
   useState,
 } from 'react'
-import {
-  addToWatchlist,
-} from '../services/watchlistService'
+
 import {
   useNavigate,
   useParams,
 } from 'react-router-dom'
 
 import {
+  addToWatchlist,
+} from '../services/watchlistService'
+
+import {
   getThreatIndicatorById,
 } from '../services/threatIndicatorService'
+
+import {
+  hasAnyRole,
+} from '../utils/auth'
 
 import type {
   ThreatIndicator,
@@ -33,14 +39,28 @@ function ThreatIndicatorDetailsPage() {
 
   const [error, setError] =
     useState('')
-const [addingToWatchlist, setAddingToWatchlist] =
-  useState(false)
 
-const [watchlistMessage, setWatchlistMessage] =
-  useState('')
+  const [
+    addingToWatchlist,
+    setAddingToWatchlist,
+  ] = useState(false)
 
-const [watchlistError, setWatchlistError] =
-  useState('')
+  const [
+    watchlistMessage,
+    setWatchlistMessage,
+  ] = useState('')
+
+  const [
+    watchlistError,
+    setWatchlistError,
+  ] = useState('')
+
+  const canCreateRelation =
+    hasAnyRole([
+      'Analyst',
+      'Admin',
+    ])
+
   useEffect(() => {
     async function loadIndicator() {
       try {
@@ -89,6 +109,38 @@ const [watchlistError, setWatchlistError] =
     loadIndicator()
   }, [id])
 
+  async function handleAddToWatchlist() {
+    if (!indicator) {
+      return
+    }
+
+    try {
+      setAddingToWatchlist(true)
+
+      setWatchlistMessage('')
+      setWatchlistError('')
+
+      await addToWatchlist(
+        indicator.id
+      )
+
+      setWatchlistMessage(
+        'Indicator added to watchlist.'
+      )
+    } catch (error) {
+      console.error(
+        'Add to watchlist error:',
+        error
+      )
+
+      setWatchlistError(
+        'Could not add indicator to watchlist.'
+      )
+    } finally {
+      setAddingToWatchlist(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="indicator-details-page">
@@ -111,37 +163,7 @@ const [watchlistError, setWatchlistError] =
         Indicator not found.
       </div>
     )
-  }async function handleAddToWatchlist() {
-  if (!indicator) {
-    return
   }
-
-  try {
-    setAddingToWatchlist(true)
-
-    setWatchlistMessage('')
-    setWatchlistError('')
-
-    await addToWatchlist(
-      indicator.id
-    )
-
-    setWatchlistMessage(
-      'Indicator added to watchlist.'
-    )
-  } catch (error) {
-    console.error(
-      'Add to watchlist error:',
-      error
-    )
-
-    setWatchlistError(
-      'Could not add indicator to watchlist.'
-    )
-  } finally {
-    setAddingToWatchlist(false)
-  }
-}
 
   return (
     <div className="indicator-details-page">
@@ -184,31 +206,50 @@ const [watchlistError, setWatchlistError] =
             View Threat Graph
           </button>
 
-          <button
-  className="primary-action-button"
-  onClick={handleAddToWatchlist}
-  disabled={addingToWatchlist}
->{watchlistMessage && (
-  <p className="watchlist-success">
-    {watchlistMessage}
-  </p>
-)}
+          {canCreateRelation && (
+            <button
+              className="secondary-action-button"
+              onClick={() =>
+                navigate(
+                  `/indicators/${indicator.id}/create-relation`
+                )
+              }
+            >
+              Create Relation
+            </button>
+          )}
 
-{watchlistError && (
-  <p className="watchlist-error">
-    {watchlistError}
-  </p>
-)}
-  {
-    addingToWatchlist
-      ? 'Adding...'
-      : 'Add to Watchlist'
-  }
-</button>
+          <button
+            className="primary-action-button"
+            onClick={
+              handleAddToWatchlist
+            }
+            disabled={
+              addingToWatchlist
+            }
+          >
+            {
+              addingToWatchlist
+                ? 'Adding...'
+                : 'Add to Watchlist'
+            }
+          </button>
 
         </div>
 
       </div>
+
+      {watchlistMessage && (
+        <p className="watchlist-success">
+          {watchlistMessage}
+        </p>
+      )}
+
+      {watchlistError && (
+        <p className="watchlist-error">
+          {watchlistError}
+        </p>
+      )}
 
       <div className="details-stats">
 
@@ -218,9 +259,7 @@ const [watchlistError, setWatchlistError] =
           </span>
 
           <strong>
-            {
-              indicator.severity
-            }
+            {indicator.severity}
           </strong>
         </div>
 
@@ -230,9 +269,7 @@ const [watchlistError, setWatchlistError] =
           </span>
 
           <strong>
-            {
-              indicator.riskScore
-            }
+            {indicator.riskScore}
           </strong>
         </div>
 
@@ -242,9 +279,7 @@ const [watchlistError, setWatchlistError] =
           </span>
 
           <strong>
-            {
-              indicator.riskLevel
-            }
+            {indicator.riskLevel}
           </strong>
         </div>
 
@@ -254,9 +289,7 @@ const [watchlistError, setWatchlistError] =
           </span>
 
           <strong>
-            {
-              indicator.confidence
-            }%
+            {indicator.confidence}%
           </strong>
         </div>
 
@@ -289,9 +322,7 @@ const [watchlistError, setWatchlistError] =
             </span>
 
             <strong>
-              {
-                indicator.sourceName
-              }
+              {indicator.sourceName}
             </strong>
           </div>
 
@@ -379,7 +410,9 @@ const [watchlistError, setWatchlistError] =
 
       </div>
 
-      <section className="details-panel details-description">
+      <section
+        className="details-panel details-description"
+      >
 
         <h2>
           Description
@@ -394,48 +427,38 @@ const [watchlistError, setWatchlistError] =
 
       </section>
 
-      {
-        indicator.cvssVector && (
-          <section className="details-panel">
+      {indicator.cvssVector && (
+        <section className="details-panel">
 
-            <h2>
-              CVSS Vector
-            </h2>
+          <h2>
+            CVSS Vector
+          </h2>
 
-            <code className="cvss-vector">
-              {
-                indicator.cvssVector
-              }
-            </code>
+          <code className="cvss-vector">
+            {indicator.cvssVector}
+          </code>
 
-          </section>
-        )
-      }
+        </section>
+      )}
 
-      {
-        indicator.referenceUrl && (
-          <section className="details-panel">
+      {indicator.referenceUrl && (
+        <section className="details-panel">
 
-            <h2>
-              Reference
-            </h2>
+          <h2>
+            Reference
+          </h2>
 
-            <a
-              href={
-                indicator.referenceUrl
-              }
-              target="_blank"
-              rel="noreferrer"
-              className="reference-link"
-            >
-              {
-                indicator.referenceUrl
-              }
-            </a>
+          <a
+            href={indicator.referenceUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="reference-link"
+          >
+            {indicator.referenceUrl}
+          </a>
 
-          </section>
-        )
-      }
+        </section>
+      )}
 
     </div>
   )
