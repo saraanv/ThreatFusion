@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ThreatFusion.Threat.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b20ec2ecb8475c95af868d374f4e450d3638b22")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31fd1d0b2de8a8be9cc5463d695b7da7b4ab2aee")]
 [assembly: System.Reflection.AssemblyProductAttribute("ThreatFusion.Threat.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ThreatFusion.Threat.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

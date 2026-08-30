@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ThreatFusion.Threat.Application.Abstractions;
+using ThreatFusion.Threat.Application.Services;
 using ThreatFusion.Threat.Domain.Entities;
 
 namespace ThreatFusion.Threat.Application.Features.ThreatRelations.Create;
@@ -13,13 +14,16 @@ public sealed class CreateThreatRelationCommandHandler
 {
     private readonly IThreatDbContext _dbContext;
     private readonly IValidator<CreateThreatRelationCommand> _validator;
+    private readonly ThreatAlertService _threatAlertService;
 
     public CreateThreatRelationCommandHandler(
         IThreatDbContext dbContext,
-        IValidator<CreateThreatRelationCommand> validator)
+        IValidator<CreateThreatRelationCommand> validator,
+        ThreatAlertService threatAlertService)
     {
         _dbContext = dbContext;
         _validator = validator;
+        _threatAlertService = threatAlertService;
     }
 
     public async Task<CreateThreatRelationResult> Handle(
@@ -39,34 +43,39 @@ public sealed class CreateThreatRelationCommandHandler
                     .ToArray());
         }
 
-        var sourceIndicatorExists =
+        // Source Indicator
+        var sourceIndicator =
             await _dbContext.ThreatIndicators
-                .AnyAsync(
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
                     x =>
                         x.Id == request.SourceIndicatorId &&
                         !x.IsDeleted,
                     cancellationToken);
 
-        if (!sourceIndicatorExists)
+        if (sourceIndicator is null)
         {
             return CreateThreatRelationResult.Failure(
                 "Source indicator was not found.");
         }
 
-        var targetIndicatorExists =
+        // Target Indicator
+        var targetIndicator =
             await _dbContext.ThreatIndicators
-                .AnyAsync(
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
                     x =>
                         x.Id == request.TargetIndicatorId &&
                         !x.IsDeleted,
                     cancellationToken);
 
-        if (!targetIndicatorExists)
+        if (targetIndicator is null)
         {
             return CreateThreatRelationResult.Failure(
                 "Target indicator was not found.");
         }
 
+        // Check duplicate relation
         var relationExists =
             await _dbContext.ThreatIndicatorRelations
                 .AnyAsync(
@@ -86,6 +95,7 @@ public sealed class CreateThreatRelationCommandHandler
                 "This threat relation already exists.");
         }
 
+        // Create Relation
         var relation =
             new ThreatIndicatorRelation
             {
@@ -110,11 +120,13 @@ public sealed class CreateThreatRelationCommandHandler
                     DateTime.UtcNow,
 
                 IsDeleted = false,
+
                 SourceName = "Manual",
-                
+
                 IsAutomatic = false,
-                
-                DiscoveredAtUtc = DateTime.UtcNow,
+
+                DiscoveredAtUtc =
+                    DateTime.UtcNow,
             };
 
         await _dbContext.ThreatIndicatorRelations
@@ -124,6 +136,28 @@ public sealed class CreateThreatRelationCommandHandler
 
         await _dbContext.SaveChangesAsync(
             cancellationToken);
+
+        // Create alert for users who are watching
+        // the source indicator.
+        await _threatAlertService
+            .CreateNewRelationAlertsAsync(
+                indicatorId:
+                    sourceIndicator.Id,
+
+                indicatorValue:
+                    sourceIndicator.Value,
+
+                severity:
+                    sourceIndicator.Severity,
+
+                relatedIndicatorValue:
+                    targetIndicator.Value,
+
+                relationType:
+                    request.RelationType,
+
+                cancellationToken:
+                    cancellationToken);
 
         return CreateThreatRelationResult.Success(
             relation.Id);
