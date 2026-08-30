@@ -117,9 +117,6 @@ function DashboardPage() {
   return (
     <div className="dashboard-page">
 
-      {/* =========================
-          HEADER
-          ========================= */}
 
       <div className="dashboard-header">
 
@@ -145,9 +142,7 @@ function DashboardPage() {
 
       </div>
 
-      {/* =========================
-          MAIN STATISTICS
-          ========================= */}
+
 
       <section className="dashboard-section">
 
@@ -284,15 +279,13 @@ function DashboardPage() {
 
       </section>
 
-      {/* =========================
-          DISTRIBUTIONS
-          ========================= */}
+
 
       <section className="dashboard-section">
 
         <div className="dashboard-two-columns">
 
-          {/* INDICATORS BY TYPE */}
+
 
           <div className="dashboard-panel">
 
@@ -342,7 +335,6 @@ function DashboardPage() {
 
           </div>
 
-          {/* INDICATORS BY SOURCE */}
 
           <div className="dashboard-panel">
 
@@ -399,9 +391,7 @@ function DashboardPage() {
 
       </section>
 
-      {/* =========================
-          TOP RISKY INDICATORS
-          ========================= */}
+
 
       <section className="dashboard-section">
 
@@ -528,9 +518,7 @@ function DashboardPage() {
 
       </section>
 
-      {/* =========================
-          LATEST THREATS
-          ========================= */}
+
 
       <section className="dashboard-section">
 
@@ -658,15 +646,13 @@ function DashboardPage() {
 
       </section>
 
-      {/* =========================
-          ALERTS + FEED SYNC
-          ========================= */}
+
 
       <section className="dashboard-section">
 
         <div className="dashboard-two-columns">
 
-          {/* RECENT ALERTS */}
+
 
           <div className="dashboard-panel">
 
@@ -768,7 +754,7 @@ function DashboardPage() {
 
           </div>
 
-          {/* LAST FEED SYNC */}
+
 
           <div className="dashboard-panel">
 

@@ -22,12 +22,6 @@ public sealed class GetDashboardOverviewQueryHandler
         GetDashboardOverviewQuery request,
         CancellationToken cancellationToken)
     {
-        /*
-         * ==========================================
-         * INDICATOR STATISTICS
-         * ==========================================
-         */
-
         var indicatorStats =
             await _dbContext.ThreatIndicators
                 .AsNoTracking()
@@ -62,11 +56,7 @@ public sealed class GetDashboardOverviewQueryHandler
         var highRiskIndicators =
             indicatorStats?.High ?? 0;
 
-        /*
-         * ==========================================
-         * USER WATCHLIST
-         * ==========================================
-         */
+        
 
         var watchedIndicators =
             await _dbContext.ThreatWatchlists
@@ -78,12 +68,7 @@ public sealed class GetDashboardOverviewQueryHandler
                         !x.IsDeleted,
                     cancellationToken);
 
-        /*
-         * ==========================================
-         * UNREAD ALERTS
-         * ==========================================
-         */
-
+        
         var unreadAlerts =
             await _dbContext.ThreatAlerts
                 .AsNoTracking()
@@ -94,11 +79,7 @@ public sealed class GetDashboardOverviewQueryHandler
                         !x.IsDeleted,
                     cancellationToken);
 
-        /*
-         * ==========================================
-         * RELATION STATISTICS
-         * ==========================================
-         */
+        
 
         var relationStats =
             await _dbContext.ThreatIndicatorRelations
@@ -126,12 +107,7 @@ public sealed class GetDashboardOverviewQueryHandler
         var manualRelations =
             relationStats?.Manual ?? 0;
 
-        /*
-         * ==========================================
-         * TOP RISKY INDICATORS
-         * ==========================================
-         */
-
+        
         var riskyIndicatorRows =
             await _dbContext.ThreatIndicators
                 .AsNoTracking()
@@ -169,12 +145,7 @@ public sealed class GetDashboardOverviewQueryHandler
                         x.SourceName))
                 .ToList();
 
-        /*
-         * ==========================================
-         * RECENT ALERTS
-         * ==========================================
-         */
-
+        
         var recentAlertsRaw =
             await _dbContext.ThreatAlerts
                 .AsNoTracking()
@@ -233,12 +204,7 @@ public sealed class GetDashboardOverviewQueryHandler
                         x.CreatedAtUtc))
                 .ToList();
 
-        /*
-         * ==========================================
-         * SEVERITY DISTRIBUTION
-         * ==========================================
-         */
-
+        
         var severityRows =
             await _dbContext.ThreatIndicators
                 .AsNoTracking()
@@ -268,12 +234,7 @@ public sealed class GetDashboardOverviewQueryHandler
                     x.Name)
                 .ToList();
 
-        /*
-         * ==========================================
-         * INDICATOR TYPE DISTRIBUTION
-         * ==========================================
-         */
-
+        
         var typeRows =
             await _dbContext.ThreatIndicators
                 .AsNoTracking()
@@ -303,12 +264,7 @@ public sealed class GetDashboardOverviewQueryHandler
                     x.Count)
                 .ToList();
 
-        /*
-         * ==========================================
-         * LAST FEED SYNC
-         * ==========================================
-         */
-
+        
         var lastFeedSyncEntity =
             await _dbContext.ThreatFeedSyncs
                 .AsNoTracking()
@@ -332,13 +288,7 @@ public sealed class GetDashboardOverviewQueryHandler
                     lastFeedSyncEntity.IsSuccessful,
                     lastFeedSyncEntity.ErrorMessage);
         }
-
-        /*
-         * ==========================================
-         * RESULT
-         * ==========================================
-         */
-
+        
         return new DashboardOverviewDto(
             totalIndicators,
             criticalIndicators,

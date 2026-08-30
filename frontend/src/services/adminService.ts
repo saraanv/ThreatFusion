@@ -43,7 +43,7 @@ export async function assignRole(
           errorData.message
       }
     } catch {
-      // Response was not JSON.
+        
     }
 
     throw new Error(message)

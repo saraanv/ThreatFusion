@@ -65,8 +65,7 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
                 lastSuccessfulSync.Value
                     .AddMinutes(-5);
 
-            // در Development اجازه نمی‌دهیم یک Sync قدیمی
-            // چند هزار رکورد را دوباره بکشد.
+            
             startDate =
                 incrementalStartDate > fallbackStartDate
                     ? incrementalStartDate
@@ -146,11 +145,7 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
             allIndicators.AddRange(
                 indicators);
 
-            /*
-             * معمولاً همان resultsPerPage برگشتی را داریم.
-             * ولی اگر NVD مقدار غیرمنتظره صفر بدهد،
-             * از مقدار config استفاده می‌کنیم تا loop بی‌نهایت نشود.
-             */
+            
             var pageSize =
                 nvdResponse.ResultsPerPage > 0
                     ? nvdResponse.ResultsPerPage
@@ -160,7 +155,7 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
 
             if (startIndex < totalResults)
             {
-                // برای فشار نیاوردن به NVD
+                
                 await Task.Delay(
                     TimeSpan.FromSeconds(7),
                     cancellationToken);
@@ -336,7 +331,7 @@ public sealed class NvdFeedProvider : IThreatFeedProvider
                 "HIGH" => 3,
                 "CRITICAL" => 4,
 
-                // اگر هنوز NVD severity نداده باشد.
+                
                 _ => 0
             };
 

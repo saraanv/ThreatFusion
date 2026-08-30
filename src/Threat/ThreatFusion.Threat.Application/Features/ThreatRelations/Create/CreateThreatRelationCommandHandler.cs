@@ -43,7 +43,7 @@ public sealed class CreateThreatRelationCommandHandler
                     .ToArray());
         }
 
-        // Source Indicator
+        
         var sourceIndicator =
             await _dbContext.ThreatIndicators
                 .AsNoTracking()
@@ -59,7 +59,7 @@ public sealed class CreateThreatRelationCommandHandler
                 "Source indicator was not found.");
         }
 
-        // Target Indicator
+        
         var targetIndicator =
             await _dbContext.ThreatIndicators
                 .AsNoTracking()
@@ -75,7 +75,7 @@ public sealed class CreateThreatRelationCommandHandler
                 "Target indicator was not found.");
         }
 
-        // Check duplicate relation
+        
         var relationExists =
             await _dbContext.ThreatIndicatorRelations
                 .AnyAsync(
@@ -95,7 +95,7 @@ public sealed class CreateThreatRelationCommandHandler
                 "This threat relation already exists.");
         }
 
-        // Create Relation
+        
         var relation =
             new ThreatIndicatorRelation
             {
@@ -137,8 +137,7 @@ public sealed class CreateThreatRelationCommandHandler
         await _dbContext.SaveChangesAsync(
             cancellationToken);
 
-        // Create alert for users who are watching
-        // the source indicator.
+        
         await _threatAlertService
             .CreateNewRelationAlertsAsync(
                 indicatorId:

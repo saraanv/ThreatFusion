@@ -182,8 +182,7 @@ export async function createThreatIndicator(
           errorData.message
       }
     } catch {
-      // اگر response JSON نبود،
-      // همان message عمومی نمایش داده می‌شود.
+      
     }
 
     throw new Error(message)

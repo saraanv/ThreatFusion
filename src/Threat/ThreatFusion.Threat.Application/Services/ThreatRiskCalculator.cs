@@ -12,13 +12,13 @@ public static class ThreatRiskCalculator
     {
         double score = 0;
 
-        // CVSS → maximum 40 points
+        
         if (cvssScore.HasValue)
         {
             score += cvssScore.Value * 4;
         }
 
-        // Severity → maximum 30 points
+        
         score += severity switch
         {
             ThreatSeverity.Low => 5,
@@ -27,11 +27,10 @@ public static class ThreatRiskCalculator
             ThreatSeverity.Critical => 30,
             _ => 0
         };
-
-        // Confidence → maximum 20 points
+        
         score += confidence * 0.2;
 
-        // Trusted / exploited source bonus
+        
         if (string.Equals(
                 sourceName,
                 "CISA-KEV",

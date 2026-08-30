@@ -37,7 +37,7 @@ export async function createThreatRelation(
           errorData.message
       }
     } catch {
-      // Response was not JSON.
+        
     }
 
     throw new Error(message)

@@ -287,7 +287,6 @@ function CreateThreatRelationPage() {
 
           <div className="form-grid">
 
-            {/* SOURCE */}
 
             <div className="form-group">
 
@@ -307,7 +306,6 @@ function CreateThreatRelationPage() {
 
             </div>
 
-            {/* RELATION TYPE */}
 
             <div className="form-group">
 
@@ -358,7 +356,6 @@ function CreateThreatRelationPage() {
 
             </div>
 
-            {/* TARGET SEARCH */}
 
             <div
               className="form-group form-grid-full"
@@ -492,7 +489,6 @@ function CreateThreatRelationPage() {
 
             </div>
 
-            {/* CONFIDENCE */}
 
             <div className="form-group">
 
@@ -517,7 +513,7 @@ function CreateThreatRelationPage() {
 
             </div>
 
-            {/* DESCRIPTION */}
+
 
             <div
               className="form-group form-grid-full"

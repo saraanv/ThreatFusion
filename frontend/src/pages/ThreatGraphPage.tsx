@@ -56,7 +56,7 @@ const indicatorId =
   const [error, setError] =
     useState('')
 
-  // Graph filters
+    
   const [depth, setDepth] =
     useState(1)
 
@@ -328,7 +328,7 @@ if (indicatorId === null) {
   return (
     <div className="threat-graph-page">
 
-      {/* Page header */}
+
       <div className="page-heading">
         <div>
           <h1>
@@ -342,10 +342,11 @@ if (indicatorId === null) {
         </div>
       </div>
 
-      {/* Graph filters */}
+
+
       <div className="graph-filters">
 
-        {/* Depth */}
+
         <div className="graph-filter-field">
           <label>
             Depth
@@ -375,7 +376,7 @@ if (indicatorId === null) {
           </select>
         </div>
 
-        {/* Relation Type */}
+
         <div className="graph-filter-field">
           <label>
             Relation Type
@@ -423,7 +424,7 @@ if (indicatorId === null) {
           </select>
         </div>
 
-        {/* Automatic / Manual */}
+
         <div className="graph-filter-field">
           <label>
             Relation Source
@@ -453,7 +454,7 @@ if (indicatorId === null) {
           </select>
         </div>
 
-        {/* Minimum Risk */}
+
         <div className="graph-filter-field">
           <label>
             Minimum Risk
@@ -475,7 +476,7 @@ if (indicatorId === null) {
 
       </div>
 
-      {/* Graph summary */}
+
       <div className="graph-summary">
 
         <div className="graph-summary-card">
@@ -546,7 +547,7 @@ if (indicatorId === null) {
 
       </div>
 
-      {/* Empty graph */}
+
       {graph.nodes.length === 0 ? (
         <div className="graph-empty">
 
@@ -561,7 +562,7 @@ if (indicatorId === null) {
 
         </div>
       ) : (
-        /* React Flow graph */
+        
         <div className="graph-container">
 
           <ReactFlow

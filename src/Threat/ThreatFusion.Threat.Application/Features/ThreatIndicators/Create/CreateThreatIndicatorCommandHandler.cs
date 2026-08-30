@@ -72,17 +72,10 @@ public sealed class CreateThreatIndicatorCommandHandler
                         !x.IsDeleted,
                     cancellationToken);
 
-        /*
-         * ==========================================
-         * EXISTING INDICATOR
-         * ==========================================
-         */
+        
         if (existingIndicator is not null)
         {
-            /*
-             * مقادیر قبلی را نگه می‌داریم
-             * تا بعداً بفهمیم چه چیزهای مهمی تغییر کرده‌اند.
-             */
+            
             var oldRiskScore =
                 existingIndicator.RiskScore;
 
@@ -101,9 +94,7 @@ public sealed class CreateThreatIndicatorCommandHandler
             var changed =
                 false;
 
-            /*
-             * Severity
-             */
+            
             if (existingIndicator.Severity !=
                 request.Severity)
             {
@@ -113,9 +104,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * Confidence
-             */
+            
             if (existingIndicator.Confidence !=
                 request.Confidence)
             {
@@ -125,9 +114,8 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * Description
-             */
+            
+            
             var normalizedDescription =
                 request.Description?.Trim();
 
@@ -140,9 +128,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * FirstSeenUtc
-             */
+            
             if (existingIndicator.FirstSeenUtc !=
                 request.FirstSeenUtc)
             {
@@ -152,9 +138,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * LastSeenUtc
-             */
+            
             if (existingIndicator.LastSeenUtc !=
                 request.LastSeenUtc)
             {
@@ -163,10 +147,7 @@ public sealed class CreateThreatIndicatorCommandHandler
 
                 changed = true;
             }
-
-            /*
-             * CVSS Score
-             */
+            
             if (existingIndicator.CvssScore !=
                 request.CvssScore)
             {
@@ -176,9 +157,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * CVSS Version
-             */
+            
             if (existingIndicator.CvssVersion !=
                 request.CvssVersion)
             {
@@ -188,9 +167,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * CVSS Vector
-             */
+            
             if (existingIndicator.CvssVector !=
                 request.CvssVector)
             {
@@ -200,9 +177,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * CWE
-             */
+            
             if (existingIndicator.CweId !=
                 request.CweId)
             {
@@ -212,9 +187,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * Reference URL
-             */
+            
             if (existingIndicator.ReferenceUrl !=
                 request.ReferenceUrl)
             {
@@ -223,10 +196,7 @@ public sealed class CreateThreatIndicatorCommandHandler
 
                 changed = true;
             }
-
-            /*
-             * Risk Score
-             */
+            
             if (existingIndicator.RiskScore !=
                 risk.Score)
             {
@@ -236,9 +206,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * Risk Level
-             */
+            
             if (existingIndicator.RiskLevel !=
                 risk.Level)
             {
@@ -248,10 +216,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                 changed = true;
             }
 
-            /*
-             * اگر هیچ چیز تغییر نکرده،
-             * فقط AutoCorrelation را اجرا می‌کنیم.
-             */
+            
             if (!changed)
             {
                 await _sender.Send(
@@ -264,23 +229,12 @@ public sealed class CreateThreatIndicatorCommandHandler
                         existingIndicator.Id);
             }
 
-            /*
-             * تغییرات را ذخیره می‌کنیم.
-             */
+            
             await _dbContext.SaveChangesAsync(
                 cancellationToken);
 
-            /*
-             * ==========================================
-             * INDICATOR UPDATED ALERT
-             * ==========================================
-             *
-             * فقط تغییرات مهم را Alert می‌کنیم:
-             * Severity
-             * Confidence
-             * CVSS
-             * RiskLevel
-             */
+            
+            
             var importantChanges =
                 new List<string>();
 
@@ -334,11 +288,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                         cancellationToken);
             }
 
-            /*
-             * ==========================================
-             * RISK INCREASED ALERT
-             * ==========================================
-             */
+            
             if (existingIndicator.RiskScore >
                 oldRiskScore)
             {
@@ -352,9 +302,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                         cancellationToken);
             }
 
-            /*
-             * بعد از Update دوباره correlation اجرا شود.
-             */
+            
             await _sender.Send(
                 new AutoCorrelateThreatIndicatorCommand(
                     existingIndicator.Id),
@@ -365,11 +313,7 @@ public sealed class CreateThreatIndicatorCommandHandler
                     existingIndicator.Id);
         }
 
-        /*
-         * ==========================================
-         * NEW INDICATOR
-         * ==========================================
-         */
+        
         var indicator =
             new ThreatIndicator
             {
@@ -436,13 +380,8 @@ public sealed class CreateThreatIndicatorCommandHandler
         await _dbContext.SaveChangesAsync(
             cancellationToken);
 
-        /*
-         * برای Indicator جدید:
-         * RiskIncreased معنی ندارد
-         * IndicatorUpdated هم معنی ندارد.
-         *
-         * فقط AutoCorrelation اجرا می‌شود.
-         */
+        
+        
         await _sender.Send(
             new AutoCorrelateThreatIndicatorCommand(
                 indicator.Id),

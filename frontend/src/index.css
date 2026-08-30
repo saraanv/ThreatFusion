@@ -1486,9 +1486,7 @@ input {
   cursor: not-allowed;
 }
 
-/* =========================================
-   CREATE THREAT INDICATOR
-   ========================================= */
+
 
 .create-indicator-page {
   width: 100%;
@@ -1515,9 +1513,6 @@ input {
   font-size: 14px;
 }
 
-/* =========================================
-   FORM CONTAINER
-   ========================================= */
 
 .indicator-form {
   display: flex;
@@ -1525,9 +1520,7 @@ input {
   gap: 22px;
 }
 
-/* =========================================
-   FORM SECTIONS
-   ========================================= */
+
 
 .indicator-form .form-section {
   padding: 24px;
@@ -1546,9 +1539,6 @@ input {
   font-weight: 600;
 }
 
-/* =========================================
-   GRID
-   ========================================= */
 
 .indicator-form .form-grid {
   display: grid;
@@ -1561,9 +1551,6 @@ input {
   grid-column: 1 / -1;
 }
 
-/* =========================================
-   LABELS
-   ========================================= */
 
 .indicator-form .form-group {
   display: flex;
@@ -1577,9 +1564,7 @@ input {
   font-weight: 500;
 }
 
-/* =========================================
-   INPUT / SELECT / TEXTAREA
-   ========================================= */
+
 
 .indicator-form .form-group input,
 .indicator-form .form-group select,
@@ -1615,9 +1600,6 @@ input {
   resize: vertical;
 }
 
-/* =========================================
-   PLACEHOLDER
-   ========================================= */
 
 .indicator-form
 .form-group
@@ -1628,9 +1610,7 @@ textarea::placeholder {
   color: #64748b;
 }
 
-/* =========================================
-   FOCUS
-   ========================================= */
+
 
 .indicator-form .form-group input:focus,
 .indicator-form .form-group select:focus,
@@ -1642,17 +1622,12 @@ textarea::placeholder {
     rgba(99, 102, 241, 0.15);
 }
 
-/* =========================================
-   SELECT
-   ========================================= */
 
 .indicator-form .form-group select {
   cursor: pointer;
 }
 
-/* =========================================
-   ERROR
-   ========================================= */
+
 
 .indicator-form .form-error {
   padding: 12px 14px;
@@ -1670,9 +1645,7 @@ textarea::placeholder {
   font-size: 14px;
 }
 
-/* =========================================
-   ACTION BUTTONS
-   ========================================= */
+
 
 .indicator-form .form-actions {
   display: flex;
@@ -1706,7 +1679,7 @@ button {
     transform 0.1s ease;
 }
 
-/* Save Indicator */
+
 
 .indicator-form
 .form-actions
@@ -1721,7 +1694,7 @@ button[type='submit']:hover:not(:disabled) {
   background: #4338ca;
 }
 
-/* Cancel */
+
 
 .indicator-form
 .form-actions
@@ -1752,9 +1725,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* =========================================
-   BACK TO INDICATORS BUTTON
-   ========================================= */
+
 
 .create-indicator-page
 .page-heading
@@ -1785,9 +1756,6 @@ button:disabled {
   color: #ffffff;
 }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
 
 @media (max-width: 768px) {
   .create-indicator-page .page-heading {
@@ -1813,9 +1781,7 @@ button:disabled {
   }
 }
 
-/* =========================================
-   CREATE THREAT RELATION
-   ========================================= */
+
 
 .create-relation-page {
   width: 100%;
@@ -1926,7 +1892,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Target search */
 
 .target-search-container {
   position: relative;
@@ -1999,7 +1964,7 @@ button:disabled {
   font-size: 13px;
 }
 
-/* Selected target */
+
 
 .selected-target {
   display: flex;
@@ -2057,7 +2022,7 @@ button:disabled {
   background: #334155;
 }
 
-/* Messages */
+
 
 .relation-form .form-error {
   padding: 12px 14px;
@@ -2087,7 +2052,7 @@ button:disabled {
   color: #86efac;
 }
 
-/* Buttons */
+
 
 .relation-form .form-actions {
   display: flex;
@@ -2176,10 +2141,6 @@ button:disabled {
     width: 100%;
   }
 }
-
-/* =========================================
-   ASSIGN ROLE
-   ========================================= */
 
 .assign-role-page {
   width: 100%;
@@ -2420,10 +2381,6 @@ button:disabled {
   }
 }
 
-/* =========================================
-   DASHBOARD
-   ========================================= */
-
 .dashboard-page {
   width: 100%;
   display: flex;
@@ -2431,9 +2388,6 @@ button:disabled {
   gap: 28px;
 }
 
-/* =========================================
-   HEADER
-   ========================================= */
 
 .dashboard-header {
   display: flex;
@@ -2487,17 +2441,12 @@ button:disabled {
   border-color: #4338ca;
 }
 
-/* =========================================
-   SECTIONS
-   ========================================= */
 
 .dashboard-section {
   width: 100%;
 }
 
-/* =========================================
-   STAT CARDS
-   ========================================= */
+
 
 .dashboard-cards {
   display: grid;
@@ -2560,9 +2509,7 @@ button:disabled {
   line-height: 1.4;
 }
 
-/* =========================================
-   TWO COLUMN LAYOUT
-   ========================================= */
+
 
 .dashboard-two-columns {
   display: grid;
@@ -2573,9 +2520,6 @@ button:disabled {
   gap: 18px;
 }
 
-/* =========================================
-   PANELS
-   ========================================= */
 
 .dashboard-panel {
   min-width: 0;
@@ -2644,9 +2588,6 @@ button:disabled {
   background: #334155;
 }
 
-/* =========================================
-   DISTRIBUTION LIST
-   ========================================= */
 
 .distribution-list {
   display: flex;
@@ -2701,9 +2642,7 @@ button:disabled {
   text-align: right;
 }
 
-/* =========================================
-   TABLE
-   ========================================= */
+
 
 .dashboard-table-wrapper {
   width: 100%;
@@ -2775,9 +2714,7 @@ button:disabled {
   white-space: nowrap;
 }
 
-/* =========================================
-   RECENT ALERTS
-   ========================================= */
+
 
 .dashboard-alert-list {
   display: flex;
@@ -2852,9 +2789,6 @@ button:disabled {
   font-size: 10px;
 }
 
-/* =========================================
-   FEED SYNC
-   ========================================= */
 
 .feed-sync {
   padding: 20px;
@@ -2994,9 +2928,6 @@ button:disabled {
   text-align: right;
 }
 
-/* =========================================
-   EMPTY / LOADING / ERROR
-   ========================================= */
 
 .dashboard-empty {
   padding: 30px 20px;
@@ -3030,9 +2961,7 @@ button:disabled {
   color: #fca5a5;
 }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
+
 
 @media (max-width: 1200px) {
 

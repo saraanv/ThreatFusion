@@ -34,11 +34,6 @@ public sealed class ThreatDbContext
     {
         base.OnModelCreating(builder);
 
-        /*
-         * ==========================================
-         * THREAT INDICATORS
-         * ==========================================
-         */
         builder.Entity<ThreatIndicator>(entity =>
         {
             entity.ToTable("ThreatIndicators");
@@ -84,9 +79,7 @@ public sealed class ThreatDbContext
             })
             .IsUnique();
 
-            /*
-             * Dashboard performance
-             */
+            
             entity.HasIndex(x => new
             {
                 x.IsDeleted,
@@ -111,11 +104,7 @@ entity.HasIndex(x => new
 
         });
 
-        /*
-         * ==========================================
-         * FEED SYNCS
-         * ==========================================
-         */
+        
         builder.Entity<ThreatFeedSync>(entity =>
         {
             entity.ToTable("ThreatFeedSyncs");
@@ -130,11 +119,7 @@ entity.HasIndex(x => new
                 .HasMaxLength(2000);
         });
 
-        /*
-         * ==========================================
-         * THREAT RELATIONS
-         * ==========================================
-         */
+        
         builder.Entity<ThreatIndicatorRelation>(
             entity =>
             {
@@ -179,11 +164,7 @@ entity.HasIndex(x => new
                 });
             });
 
-        /*
-         * ==========================================
-         * WATCHLIST
-         * ==========================================
-         */
+        
         builder.Entity<ThreatWatchlist>(entity =>
         {
             entity.ToTable("ThreatWatchlists");
@@ -211,11 +192,7 @@ entity.HasIndex(x => new
             });
         });
 
-        /*
-         * ==========================================
-         * ALERTS
-         * ==========================================
-         */
+        
         builder.Entity<ThreatAlert>(entity =>
         {
             entity.ToTable("ThreatAlerts");

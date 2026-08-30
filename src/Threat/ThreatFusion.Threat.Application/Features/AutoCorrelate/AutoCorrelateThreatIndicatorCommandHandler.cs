@@ -218,12 +218,7 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
 
             createdRelations++;
 
-            /*
-             * Alert برای هر دو سمت relation.
-             *
-             * اگر URL watch شده باشد:
-             * URL → Domain alert
-             */
+            
             await _threatAlertService
                 .CreateNewRelationAlertsAsync(
                     urlIndicator.Id,
@@ -233,10 +228,6 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                     ThreatRelationType.AssociatedWith,
                     cancellationToken);
 
-            /*
-             * اگر Domain watch شده باشد:
-             * Domain ← URL alert
-             */
             await _threatAlertService
                 .CreateNewRelationAlertsAsync(
                     domainIndicator.Id,
@@ -247,10 +238,7 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                     cancellationToken);
         }
 
-        /*
-         * حالا Domain را DNS enrich می‌کنیم.
-         * این مرحله می‌تواند Domain → IP relation بسازد.
-         */
+        
         createdRelations +=
             await CorrelateDomainWithIpAsync(
                 domainIndicator,
@@ -418,10 +406,7 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
 
             createdRelations++;
 
-            /*
-             * Domain روی watchlist باشد:
-             * Domain → IP
-             */
+            
             await _threatAlertService
                 .CreateNewRelationAlertsAsync(
                     domainIndicator.Id,
@@ -431,10 +416,7 @@ public sealed class AutoCorrelateThreatIndicatorCommandHandler
                     ThreatRelationType.ResolvesTo,
                     cancellationToken);
 
-            /*
-             * IP روی watchlist باشد:
-             * IP ← Domain
-             */
+            
             await _threatAlertService
                 .CreateNewRelationAlertsAsync(
                     ipIndicator.Id,

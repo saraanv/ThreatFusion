@@ -36,10 +36,7 @@ function ThreatIndicatorsPage() {
 
   const [error, setError] =
     useState('')
-
-  /*
-   * چیزی که کاربر داخل فرم تایپ می‌کند
-   */
+    
   const [searchTerm, setSearchTerm] =
     useState('')
 
@@ -52,10 +49,7 @@ function ThreatIndicatorsPage() {
   const [riskLevel, setRiskLevel] =
     useState('')
 
-  /*
-   * فیلترهایی که واقعاً
-   * روی API اعمال شده‌اند.
-   */
+    
   const [appliedSearchTerm, setAppliedSearchTerm] =
     useState('')
 
@@ -150,10 +144,7 @@ const [watchlistError, setWatchlistError] =
   ) {
     event.preventDefault()
 
-    /*
-     * با اعمال filter
-     * همیشه برگردیم صفحه اول.
-     */
+    
     setPageNumber(1)
 
     setAppliedSearchTerm(
@@ -250,9 +241,6 @@ const [watchlistError, setWatchlistError] =
 
       </div>
 
-      {/* ============================= */}
-      {/* FILTERS */}
-      {/* ============================= */}
 
       <form
         className="indicator-filters"
@@ -385,9 +373,7 @@ const [watchlistError, setWatchlistError] =
 
       </form>
 
-      {/* ============================= */}
-      {/* LOADING / ERROR */}
-      {/* ============================= */}
+
 
       {loading && (
         <div className="table-message">
@@ -401,9 +387,6 @@ const [watchlistError, setWatchlistError] =
         </div>
       )}
 
-      {/* ============================= */}
-      {/* TABLE */}
-      {/* ============================= */}
 
       {!loading &&
        !error &&
@@ -516,9 +499,6 @@ const [watchlistError, setWatchlistError] =
 
           </div>
 
-          {/* ============================= */}
-          {/* PAGINATION */}
-          {/* ============================= */}
 
           <div className="pagination">
 

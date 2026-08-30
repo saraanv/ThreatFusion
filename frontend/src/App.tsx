@@ -53,9 +53,7 @@ function App() {
 
       <Routes>
 
-        {/* =========================
-            PUBLIC ROUTES
-            ========================= */}
+
 
         <Route
           path="/login"
@@ -71,11 +69,7 @@ function App() {
           }
         />
 
-        {/* =========================
-            AUTHENTICATED ROUTES
-            All routes here use AppLayout
-            and therefore show Sidebar.
-            ========================= */}
+
 
         <Route
           element={
@@ -85,7 +79,7 @@ function App() {
           }
         >
 
-          {/* Dashboard */}
+
 
           <Route
             path="/dashboard"
@@ -94,7 +88,7 @@ function App() {
             }
           />
 
-          {/* Threat Indicators */}
+
 
           <Route
             path="/indicators"
@@ -103,7 +97,7 @@ function App() {
             }
           />
 
-          {/* Create Threat Indicator */}
+
 
           <Route
             path="/indicators/create"
@@ -119,7 +113,7 @@ function App() {
             }
           />
 
-          {/* Threat Indicator Details */}
+
 
           <Route
             path="/indicators/:id"
@@ -144,7 +138,6 @@ function App() {
             }
           />
 
-          {/* Threat Graph */}
 
           <Route
             path="/graph"
@@ -153,7 +146,7 @@ function App() {
             }
           />
 
-          {/* Watchlist */}
+
 
           <Route
             path="/watchlist"
@@ -162,7 +155,7 @@ function App() {
             }
           />
 
-          {/* Alerts */}
+
 
           <Route
             path="/alerts"
@@ -171,7 +164,7 @@ function App() {
             }
           />
 
-          {/* Admin - Assign Role */}
+
 
           <Route
             path="/admin/assign-role"
@@ -188,9 +181,7 @@ function App() {
 
         </Route>
 
-        {/* =========================
-            DEFAULT ROUTE
-            ========================= */}
+
 
         <Route
           path="/"
@@ -202,9 +193,7 @@ function App() {
           }
         />
 
-        {/* =========================
-            UNKNOWN ROUTES
-            ========================= */}
+
 
         <Route
           path="*"

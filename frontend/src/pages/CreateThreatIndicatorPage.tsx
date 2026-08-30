@@ -230,9 +230,6 @@ function CreateThreatIndicatorPage() {
         onSubmit={handleSubmit}
       >
 
-        {/* ========================= */}
-        {/* BASIC INFORMATION */}
-        {/* ========================= */}
 
         <div className="form-section">
 
@@ -400,10 +397,6 @@ function CreateThreatIndicatorPage() {
 
         </div>
 
-        {/* ========================= */}
-        {/* OBSERVATION */}
-        {/* ========================= */}
-
         <div className="form-section">
 
           <h2>
@@ -474,9 +467,7 @@ function CreateThreatIndicatorPage() {
 
         </div>
 
-        {/* ========================= */}
-        {/* CVE INFORMATION */}
-        {/* ========================= */}
+       
 
         {type === 8 && (
           <div className="form-section">
@@ -590,9 +581,7 @@ function CreateThreatIndicatorPage() {
           </div>
         )}
 
-        {/* ========================= */}
-        {/* ERROR */}
-        {/* ========================= */}
+        
 
         {error && (
           <div className="form-error">
@@ -600,9 +589,7 @@ function CreateThreatIndicatorPage() {
           </div>
         )}
 
-        {/* ========================= */}
-        {/* ACTIONS */}
-        {/* ========================= */}
+        
 
         <div className="form-actions">
 
