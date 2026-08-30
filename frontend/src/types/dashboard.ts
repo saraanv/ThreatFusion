@@ -51,3 +51,47 @@ export interface DashboardOverview {
 
   lastFeedSync: DashboardFeedSync | null
 }
+
+export interface IndicatorTypeCount {
+  type: string
+  count: number
+}
+
+export interface SourceCount {
+  sourceName: string
+  count: number
+}
+
+export interface LatestThreat {
+  id: number
+  type: string
+  value: string
+  severity: string
+  confidence: number
+  sourceName: string
+  createdAtUtc: string
+}
+
+export interface ThreatDashboardFeedSync {
+  feedName: string
+  startedAtUtc: string
+  completedAtUtc: string | null
+  totalFetched: number
+  createdCount: number
+  updatedCount: number
+  unchangedCount: number
+  failedCount: number
+  isSuccessful: boolean
+}
+
+export interface ThreatDashboard {
+  totalIndicators: number
+  activeIndicators: number
+  criticalIndicators: number
+
+  indicatorsByType: IndicatorTypeCount[]
+  indicatorsBySource: SourceCount[]
+  latestThreats: LatestThreat[]
+
+  lastFeedSync: ThreatDashboardFeedSync | null
+}
